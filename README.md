@@ -80,7 +80,9 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 composer install
 npm install
 
-edit file .env "cari yang bagian databases ubah ikutin yang dibawah"|
+karna nanti pas di vlone ga ada .env "jadi di copy dulu dari .env example baru paste", "setelah paste file yg .env example rename jadi .env"
+
+edit file .env "cari yang bagian databases ubah ikutin yang dibawah"
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
