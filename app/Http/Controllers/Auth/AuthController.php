@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -31,9 +33,7 @@ class AuthController extends Controller
             return redirect()->intended(route('dashboard'));
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        return back()->with('error', 'Email atau password salah.')->onlyInput('email');
     }
 
     // Handle logout
@@ -51,24 +51,46 @@ class AuthController extends Controller
         return view('auth.forgot-password');
     }
 
-    // Handle forgot password
+    // Handle forgot password - Dimodifikasi untuk langsung ke reset password
     public function forgotPassword(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        $request->validate(['email' => 'required|email|exists:users,email']);
 
-        $status = Password::sendResetLink(
-            $request->only('email')
+        // Cek apakah user ada
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->withErrors(['email' => 'Email tidak ditemukan dalam sistem kami.']);
+        }
+
+        // Generate token baru
+        $token = Str::random(64);
+
+        // Simpan token di database
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'email' => $request->email,
+                'token' => $token,
+                'created_at' => now()
+            ]
         );
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['status' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+        // Redirect langsung ke halaman reset password dengan token dan email
+        return redirect()->route('password.reset', [
+            'token' => $token,
+            'email' => $request->email
+        ]);
     }
 
     // Show reset password form
-    public function showResetPasswordForm(string $token)
+    public function showResetPasswordForm(Request $request, string $token)
     {
-        return view('auth.reset-password', ['token' => $token]);
+        // Tambahkan email ke view jika tersedia di query string
+        return view('auth.reset-password', [
+            'token' => $token,
+            'email' => $request->email
+        ]);
     }
 
     // Handle reset password
@@ -80,21 +102,29 @@ class AuthController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
 
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->setRememberToken(Str::random(60));
+        // Cek validitas token
+        $tokenData = DB::table('password_reset_tokens')
+            ->where('email', $request->email)
+            ->where('token', $request->token)
+            ->first();
 
-                $user->save();
+        if (!$tokenData) {
+            return back()->withErrors(['email' => 'Token tidak valid atau telah kadaluarsa.']);
+        }
 
-                event(new PasswordReset($user));
-            }
-        );
+        // Update password user
+        $user = User::where('email', $request->email)->first();
+        $user->password = Hash::make($request->password);
+        $user->setRememberToken(Str::random(60));
+        $user->save();
 
-        return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('status', __($status))
-            : back()->withErrors(['email' => [__($status)]]);
+        // Hapus token reset password
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        // Trigger event password reset
+        event(new PasswordReset($user));
+
+        // Redirect ke halaman login dengan pesan sukses
+        return redirect()->route('login')->with('status', 'Password Anda telah diperbarui!');
     }
 }
