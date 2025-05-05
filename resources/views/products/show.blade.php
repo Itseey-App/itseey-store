@@ -37,10 +37,18 @@
 
                         @php $daysUntilExpiry = $product->getDaysUntilExpiry(); @endphp
                         <p class="text-sm text-gray-500 mt-1">
-                            Expires on: {{ $product->expiry_date->format('Y-m-d') }}
-                            @if ($daysUntilExpiry <= 20)
-                                <span class="inline-flex items-center ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium {{ $daysUntilExpiry <= 10 ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ $daysUntilExpiry }} days left
+                            Expires on: <span class="font-medium text-gray-700">{{ $product->expiry_date->format('l, d F Y') }}</span>
+                            @if ($daysUntilExpiry <= 30)
+                                <span class="inline-flex items-center ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    {{ $daysUntilExpiry <= 0 ? 'bg-red-100 text-red-800' : ($daysUntilExpiry <= 10 ? 'bg-orange-100 text-orange-800' : 'bg-yellow-100 text-yellow-800') }}">
+                                    @if ($daysUntilExpiry <= 0)
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Expired
+                                    @else
+                                        {{ $daysUntilExpiry }} {{ Str::plural('day', $daysUntilExpiry) }} left
+                                    @endif
                                 </span>
                             @endif
                         </p>
@@ -118,7 +126,7 @@
                                     @endif
                                 </div>
                                 <div class="text-xs text-gray-500">
-                                    {{ $movement->created_at->format('Y-m-d H:i') }}
+                                    {{ $movement->created_at->format('d M Y H:i') }}
                                 </div>
                             </div>
                         </li>
