@@ -73,7 +73,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 # Pull : (PULL UNTUK NARIK DATA TERBARU DARI GITHUB SETELAH MERGE DILAKUKAN)
 
--   pindah ke branch master : git checkout master - git pull origin master, kemudian pindah ke branch sendiri untuk melakukan tugas selanjutnya (langkah sama seperti setelah cloning)
+-   pindah ke branch main : git checkout main - git pull origin main, kemudian pindah ke branch sendiri untuk melakukan tugas selanjutnya (langkah sama seperti setelah cloning)
 
 # Running Project:
 
