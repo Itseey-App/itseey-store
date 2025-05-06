@@ -180,7 +180,7 @@
     <!-- Recent Stock Movements -->
     <div class="mt-8 mb-8">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold text-gray-700">Pergerakan Stok Terbaru</h2>
+            <h2 class="text-lg font-bold text-gray-700">Perpindahan Stok Terbaru</h2>
             <a href="{{ route('stock-movements.index') }}" class="px-4 py-2 text-sm font-medium text-white transition-colors rounded-lg bg-primary hover:bg-primary-dark">
                 Lihat Semua
             </a>
@@ -221,7 +221,7 @@
                                     <svg class="w-12 h-12 mb-3 text-pink-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
                                     </svg>
-                                    <p>Tidak ada pergerakan stok terbaru</p>
+                                    <p>Tidak ada perpindahan stok terbaru</p>
                                 </div>
                             </td>
                         </tr>
