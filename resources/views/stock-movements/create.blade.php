@@ -23,13 +23,13 @@
                 <x-form-select name="product_id" id="product_id" label="Product" required>
                     <option value="">Select Product</option>
                     @foreach($products as $product)
-                        <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
-                            {{ $product->name }} (Current Stock: {{ $product->stock }})
-                        </option>
+                    <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                        {{ $product->name }} (Current Stock: {{ $product->stock }})
+                    </option>
                     @endforeach
                 </x-form-select>
                 @error('product_id')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -40,7 +40,7 @@
                     <option value="out" {{ old('type') == 'out' ? 'selected' : '' }}>Stock Out</option>
                 </x-form-select>
                 @error('type')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -52,10 +52,9 @@
                     :value="old('quantity')"
                     label="Quantity"
                     min="1"
-                    required
-                />
+                    required />
                 @error('quantity')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -65,10 +64,9 @@
                     name="notes"
                     id="notes"
                     :value="old('notes')"
-                    label="Notes (Optional)"
-                />
+                    label="Notes (Optional)" />
                 @error('notes')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
         </div>

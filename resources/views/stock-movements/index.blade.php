@@ -14,6 +14,7 @@
     </a>
 </div>
 
+
 <!-- Filters -->
 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
     <div class="p-4 bg-gray-50 border-b">
@@ -27,8 +28,7 @@
                     name="from_date"
                     id="from_date"
                     :value="request('from_date')"
-                    label="From Date"
-                />
+                    label="From Date" />
             </div>
             <div>
                 <x-form-input
@@ -36,16 +36,15 @@
                     name="to_date"
                     id="to_date"
                     :value="request('to_date')"
-                    label="To Date"
-                />
+                    label="To Date" />
             </div>
             <div>
                 <x-form-select name="product_id" id="product_id" label="Product">
                     <option value="">All Products</option>
                     @foreach($products as $product)
-                        <option value="{{ $product->id }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>
-                            {{ $product->name }}
-                        </option>
+                    <option value="{{ $product->id }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>
+                        {{ $product->name }}
+                    </option>
                     @endforeach
                 </x-form-select>
             </div>
@@ -60,9 +59,9 @@
         <div class="mt-4 flex justify-end">
             <x-button type="submit" variant="primary">Filter</x-button>
             @if(request()->anyFilled(['from_date', 'to_date', 'product_id', 'type']))
-                <a href="{{ route('stock-movements.index') }}" class="ml-2 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition-all inline-flex items-center">
-                    Clear Filters
-                </a>
+            <a href="{{ route('stock-movements.index') }}" class="ml-2 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition-all inline-flex items-center">
+                Clear Filters
+            </a>
             @endif
         </div>
     </form>
@@ -108,7 +107,21 @@
             </tr>
             @empty
             <tr>
-                <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No stock movement records found</td>
+                <td colspan="7" class="px-6 py-12 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex flex-col items-center">
+                        <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-lg font-medium text-gray-500">No stock movement records found</p>
+                        <p class="text-gray-400 mt-1">Try adjusting your filters or add a new stock movement</p>
+                        <a href="{{ route('stock-movements.create') }}" class="mt-4 btn-primary inline-flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Record Stock Movement
+                        </a>
+                    </div>
+                </td>
             </tr>
             @endforelse
         </tbody>
@@ -118,4 +131,6 @@
         {{ $stockMovements->links() }}
     </div>
 </div>
+
+
 @endsection

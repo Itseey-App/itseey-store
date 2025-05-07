@@ -31,15 +31,15 @@
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                         @if ($product->image)
-                            <div class="flex-shrink-0 h-10 w-10">
-                                <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                            </div>
+                        <div class="flex-shrink-0 h-10 w-10">
+                            <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                        </div>
                         @else
-                            <div class="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
-                                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
+                        <div class="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
+                            <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
                         @endif
                         <div class="ml-4">
                             <div class="text-sm font-medium text-gray-900">{{ $product->name }}</div>
@@ -54,23 +54,23 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     @php
-                        $daysUntilExpiry = $product->getDaysUntilExpiry();
+                    $daysUntilExpiry = $product->getDaysUntilExpiry();
                     @endphp
                     <div class="text-sm text-gray-900">{{ $product->expiry_date->format('l, d F Y') }}</div>
 
                     @if ($daysUntilExpiry <= 30)
                         <span class="inline-flex items-center px-2.5 py-0.5 mt-1 rounded-full text-xs font-medium
                             {{ $daysUntilExpiry <= 0 ? 'bg-red-100 text-red-800' : ($daysUntilExpiry <= 10 ? 'bg-orange-100 text-orange-800' : 'bg-yellow-100 text-yellow-800') }}">
-                            @if ($daysUntilExpiry <= 0)
-                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                Expired
+                        @if ($daysUntilExpiry <= 0)
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Expired
                             @else
-                                {{ $daysUntilExpiry }} {{ Str::plural('day', $daysUntilExpiry) }} left
+                            {{ $daysUntilExpiry }} {{ Str::plural('day', $daysUntilExpiry) }} left
                             @endif
-                        </span>
-                    @endif
+                            </span>
+                            @endif
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div class="flex items-center justify-end space-x-2">
@@ -91,8 +91,7 @@
                             <button
                                 type="button"
                                 @click="confirmDelete = true"
-                                class="text-red-600 hover:text-red-900"
-                            >
+                                class="text-red-600 hover:text-red-900">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                 </svg>

@@ -91,13 +91,13 @@ DB_DATABASE=itseey_store
 DB_USERNAME=root
 DB_PASSWORD="isi pw database lu kalo ga ada kosong aja"
 
-Php artisan key:generate
+php artisan key:generate
 php artisan migrate
 php artisan db:seed
 php artisan storage:link
 
 running phpnya buka 2 terminal bang di vs codenya (yang satu buat BE nya)
-Php artisan serve
+php artisan serve
 
 (yang satu lagi buat FE nya ini)
 npm run dev
