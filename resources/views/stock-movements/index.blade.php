@@ -8,8 +8,8 @@
 
 <!-- Improved Filters -->
 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-    <div class="p-4 bg-gray-50 border-b">
-        <h3 class="text-sm font-medium text-gray-700">Filter Stock Movements</h3>
+    <div class="p-4 bg-pink-50 border-b">
+        <h3 class="text-sm font-semibold text-pink-500">Filter Stock Movements</h3>
     </div>
     <form method="GET" action="{{ route('stock-movements.index') }}" class="p-4">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -48,14 +48,19 @@
             </div>
         </div>
         <div class="mt-4 flex flex-wrap gap-2 justify-end">
-            <div class="flex-1">
+            <div class="flex-1 relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </div>
                 <x-form-input
                     type="text"
                     name="q"
                     id="q"
                     :value="request('q')"
                     placeholder="Search notes or product name..."
-                    class="w-full" />
+                    class="pl-10" />
             </div>
 
             <x-button type="submit" variant="primary" class="px-6">
@@ -79,19 +84,19 @@
 <!-- Stock Movements Table -->
 <div class="bg-white rounded-lg shadow-md overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+        <thead class="bg-pink-50">
             <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500 uppercase tracking-wider">Date & Time</th>
+                <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Product</th>
+                <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Category</th>
+                <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Type</th>
+                <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Quantity</th>
+                <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Notes</th>
             </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse ($stockMovements as $movement)
-            <tr>
+            <tr class="hover:bg-pink-50 transition-colors {{ $loop->first && request()->has('highlight') ? 'bg-yellow-50 animate-pulse' : '' }}">
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-900">{{ $movement->created_at->format('Y-m-d') }}</div>
                     <div class="text-sm text-gray-500">{{ $movement->created_at->format('H:i:s') }}</div>
