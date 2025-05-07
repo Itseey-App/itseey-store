@@ -31,6 +31,15 @@ class StockMovementController extends Controller
             $query->where('type', $request->type);
         }
 
+        if ($request->filled('q')) {
+            $query->where(function ($sub) use ($request) {
+                $sub->whereHas('product', function ($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->q . '%');
+                })
+                    ->orWhere('notes', 'like', '%' . $request->q . '%');
+            });
+        }
+
         $stockMovements = $query->orderBy('created_at', 'desc')->paginate(15);
         $products = Product::orderBy('name')->get();
 
@@ -75,69 +84,69 @@ class StockMovementController extends Controller
     }
 
     public function report(Request $request)
-{
-    $reportType = $request->input('report_type', 'daily');
-    $fromDate = $request->input('from_date', Carbon::now()->startOfDay()->format('Y-m-d'));
-    $toDate = $request->input('to_date', Carbon::now()->endOfDay()->format('Y-m-d'));
+    {
+        $reportType = $request->input('report_type', 'daily');
+        $fromDate = $request->input('from_date', Carbon::now()->startOfDay()->format('Y-m-d'));
+        $toDate = $request->input('to_date', Carbon::now()->endOfDay()->format('Y-m-d'));
 
-    // Parse dates
-    $from = Carbon::parse($fromDate)->startOfDay();
-    $to = Carbon::parse($toDate)->endOfDay();
+        // Parse dates
+        $from = Carbon::parse($fromDate)->startOfDay();
+        $to = Carbon::parse($toDate)->endOfDay();
 
-    // Base query
-    $query = StockMovement::with(['product', 'product.category'])
-        ->whereBetween('created_at', [$from, $to]);
+        // Base query
+        $query = StockMovement::with(['product', 'product.category'])
+            ->whereBetween('created_at', [$from, $to]);
 
-    // Group by date based on report type
-    switch ($reportType) {
-        case 'daily':
-            $dateFormat = 'Y-m-d';
-            $title = 'Daily Stock Movement Report';
-            break;
-        case 'weekly':
-            $dateFormat = 'Y-W'; // Year and week number
-            $title = 'Weekly Stock Movement Report';
-            break;
-        case 'monthly':
-            $dateFormat = 'Y-m';
-            $title = 'Monthly Stock Movement Report';
-            break;
-        case 'yearly':
-            $dateFormat = 'Y';
-            $title = 'Yearly Stock Movement Report';
-            break;
-        default:
-            $dateFormat = 'Y-m-d';
-            $title = 'Stock Movement Report';
-    }
+        // Group by date based on report type
+        switch ($reportType) {
+            case 'daily':
+                $dateFormat = 'Y-m-d';
+                $title = 'Daily Stock Movement Report';
+                break;
+            case 'weekly':
+                $dateFormat = 'Y-W'; // Year and week number
+                $title = 'Weekly Stock Movement Report';
+                break;
+            case 'monthly':
+                $dateFormat = 'Y-m';
+                $title = 'Monthly Stock Movement Report';
+                break;
+            case 'yearly':
+                $dateFormat = 'Y';
+                $title = 'Yearly Stock Movement Report';
+                break;
+            default:
+                $dateFormat = 'Y-m-d';
+                $title = 'Stock Movement Report';
+        }
 
-    // Get data
-    $stockMovements = $query->orderBy('created_at', 'desc')->get();
+        // Get data
+        $stockMovements = $query->orderBy('created_at', 'desc')->get();
 
-    // Group data by date
-    $groupedData = $stockMovements->groupBy(function ($item) use ($dateFormat) {
-        return Carbon::parse($item->created_at)->format($dateFormat);
-    });
+        // Group data by date
+        $groupedData = $stockMovements->groupBy(function ($item) use ($dateFormat) {
+            return Carbon::parse($item->created_at)->format($dateFormat);
+        });
 
-    // For export to PDF
-    if ($request->has('export_pdf')) {
-        $pdf = PDF::loadView('stock-movements.report-pdf', [
+        // For export to PDF
+        if ($request->has('export_pdf')) {
+            $pdf = PDF::loadView('stock-movements.report-pdf', [
+                'title' => $title,
+                'fromDate' => $from->format('Y-m-d'),
+                'toDate' => $to->format('Y-m-d'),
+                'reportType' => $reportType,
+                'groupedData' => $groupedData,
+            ]);
+
+            return $pdf->download("stock-movement-report-{$reportType}-{$from->format('Y-m-d')}-to-{$to->format('Y-m-d')}.pdf");
+        }
+
+        return view('stock-movements.report', [
             'title' => $title,
             'fromDate' => $from->format('Y-m-d'),
             'toDate' => $to->format('Y-m-d'),
             'reportType' => $reportType,
             'groupedData' => $groupedData,
         ]);
-
-        return $pdf->download("stock-movement-report-{$reportType}-{$from->format('Y-m-d')}-to-{$to->format('Y-m-d')}.pdf");
     }
-
-    return view('stock-movements.report', [
-        'title' => $title,
-        'fromDate' => $from->format('Y-m-d'),
-        'toDate' => $to->format('Y-m-d'),
-        'reportType' => $reportType,
-        'groupedData' => $groupedData,
-    ]);
-}
 }

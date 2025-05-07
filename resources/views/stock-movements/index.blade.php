@@ -4,16 +4,6 @@
 @section('header', 'Stock Movements')
 
 @section('content')
-<div class="flex justify-end items-center mb-6">
-    <!-- <a href="{{ route('stock-movements.create') }}" class="group flex items-center px-4 py-2.5 bg-pink-500 text-white font-medium rounded-md hover:bg-pink-600 transition-all duration-200 shadow-sm hover:shadow">
-        <span class="flex justify-center items-center w-5 h-5 mr-2 bg-white bg-opacity-20 rounded-full">
-            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-            </svg>
-        </span>
-        Record Stock Movement
-    </a> -->
-</div>
 
 
 <!-- Improved Filters -->
@@ -58,6 +48,16 @@
             </div>
         </div>
         <div class="mt-4 flex flex-wrap gap-2 justify-end">
+            <div class="flex-1">
+                <x-form-input
+                    type="text"
+                    name="q"
+                    id="q"
+                    :value="request('q')"
+                    placeholder="Search notes or product name..."
+                    class="w-full" />
+            </div>
+
             <x-button type="submit" variant="primary" class="px-6">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
@@ -136,8 +136,64 @@
         </tbody>
     </table>
 
+    <!-- Pagination -->
     <div class="px-6 py-4 border-t">
-        {{ $stockMovements->links() }}
+        <div class="flex items-center justify-between">
+            <div class="flex items-center text-sm text-gray-600">
+                <span>Showing {{ $stockMovements->firstItem() ?? 0 }} to {{ $stockMovements->lastItem() ?? 0 }} of {{ $stockMovements->total() }} results</span>
+                <form method="GET" action="{{ route('stock-movements.index') }}" class="inline-flex ml-4">
+                    <select name="per_page" id="per_page" class="ml-4 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm"
+                        onchange="this.form.submit()">
+                        @foreach([15, 30, 50, 100] as $perPage)
+                        <option value="{{ $perPage }}" {{ request('per_page', 15) == $perPage ? 'selected' : '' }}>
+                            {{ $perPage }} per page
+                        </option>
+                        @endforeach
+                    </select>
+                    <input type="hidden" name="from_date" value="{{ request('from_date') }}">
+                    <input type="hidden" name="to_date" value="{{ request('to_date') }}">
+                    <input type="hidden" name="product_id" value="{{ request('product_id') }}">
+                    <input type="hidden" name="type" value="{{ request('type') }}">
+                    <input type="hidden" name="q" value="{{ request('q') }}">
+                </form>
+            </div>
+
+            <!-- Pagination Links -->
+            @if ($stockMovements->hasPages())
+            <div class="flex items-center space-x-1">
+                <!-- Previous Page Link -->
+                <a href="{{ $stockMovements->previousPageUrl() }}"
+                    class="{{ $stockMovements->onFirstPage() ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-gray-50 text-gray-700' }} px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 border">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+
+                <!-- Pagination Elements -->
+                <div class="hidden md:flex space-x-1">
+                    @foreach ($stockMovements->getUrlRange(max(1, $stockMovements->currentPage() - 2), min($stockMovements->lastPage(), $stockMovements->currentPage() + 2)) as $page => $url)
+                    <a href="{{ $url }}"
+                        class="{{ $page == $stockMovements->currentPage() ? 'bg-pink-500 hover:bg-pink-600 text-white' : 'bg-white hover:bg-gray-50 text-gray-700' }} px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150 border">
+                        {{ $page }}
+                    </a>
+                    @endforeach
+                </div>
+
+                <!-- Current Page Indicator (Mobile) -->
+                <span class="md:hidden px-4 py-2 rounded-md text-sm font-medium bg-white border">
+                    {{ $stockMovements->currentPage() }} / {{ $stockMovements->lastPage() }}
+                </span>
+
+                <!-- Next Page Link -->
+                <a href="{{ $stockMovements->nextPageUrl() }}"
+                    class="{{ !$stockMovements->hasMorePages() ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-gray-50 text-gray-700' }} px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 border">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+            @endif
+        </div>
     </div>
 </div>
 
