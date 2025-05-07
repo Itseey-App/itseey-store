@@ -4,18 +4,19 @@
 @section('header', 'Stock Movements')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
-    <h2 class="text-xl font-semibold text-gray-800">Stock Movement Records</h2>
-    <a href="{{ route('stock-movements.create') }}" class="btn-primary">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-        </svg>
+<div class="flex justify-end items-center mb-6">
+    <!-- <a href="{{ route('stock-movements.create') }}" class="group flex items-center px-4 py-2.5 bg-pink-500 text-white font-medium rounded-md hover:bg-pink-600 transition-all duration-200 shadow-sm hover:shadow">
+        <span class="flex justify-center items-center w-5 h-5 mr-2 bg-white bg-opacity-20 rounded-full">
+            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+        </span>
         Record Stock Movement
-    </a>
+    </a> -->
 </div>
 
 
-<!-- Filters -->
+<!-- Improved Filters -->
 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
     <div class="p-4 bg-gray-50 border-b">
         <h3 class="text-sm font-medium text-gray-700">Filter Stock Movements</h3>
@@ -56,11 +57,19 @@
                 </x-form-select>
             </div>
         </div>
-        <div class="mt-4 flex justify-end">
-            <x-button type="submit" variant="primary">Filter</x-button>
+        <div class="mt-4 flex flex-wrap gap-2 justify-end">
+            <x-button type="submit" variant="primary" class="px-6">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                </svg>
+                Filter
+            </x-button>
             @if(request()->anyFilled(['from_date', 'to_date', 'product_id', 'type']))
-            <a href="{{ route('stock-movements.index') }}" class="ml-2 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition-all inline-flex items-center">
-                Clear Filters
+            <a href="{{ route('stock-movements.index') }}" class="flex items-center px-5 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition-all shadow-sm hover:shadow">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                Clear
             </a>
             @endif
         </div>
@@ -134,3 +143,8 @@
 
 
 @endsection
+<a href="{{ route('stock-movements.create') }}" class="fixed bottom-6 right-6 z-50 p-4 bg-pink-500 hover:bg-pink-600 text-white rounded-full shadow-lg transition-all">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    </svg>
+</a>
