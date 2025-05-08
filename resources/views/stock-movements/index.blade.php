@@ -98,7 +98,15 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse ($stockMovements as $movement)
-            <tr class="hover:bg-pink-50 transition-colors {{ $loop->first && request()->has('highlight') ? 'bg-yellow-50 animate-pulse' : '' }}">
+            <tr class="hover:bg-pink-50 transition-colors {{ $loop->first && request()->has('highlight') ? 'bg-yellow-50 animate-pulse' : '' }} cursor-pointer"
+                data-product-id="{{ $movement->product_id }}"
+                data-product-name="{{ $movement->product->name }}"
+                data-product-category="{{ $movement->product->category->name }}"
+                data-product-description="{{ $movement->product->description ?? 'No description available' }}"
+                data-product-stock="{{ $movement->product->current_stock ?? $movement->product->stock }}"
+                data-product-notes="{{ $movement->notes ?? 'No notes available' }}"
+                data-product-sku="{{ $movement->product->sku ?? 'N/A' }}"
+                onclick="showProductDetail(this)">
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-900">{{ $movement->created_at->format('Y-m-d') }}</div>
                     <div class="text-sm text-gray-500">{{ $movement->created_at->format('H:i:s') }}</div>
@@ -207,6 +215,56 @@
     </div>
 </div>
 
+<!-- Product Detail Modal -->
+<div id="productDetailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden transform transition-all">
+        <div class="bg-pink-50 px-6 py-4 border-b flex justify-between items-center">
+            <h3 class="text-lg font-medium text-pink-500" id="modalProductName">Product Detail</h3>
+            <button onclick="closeProductModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="px-6 py-4">
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Category</p>
+                <p class="font-medium" id="modalProductCategory">Loading...</p>
+            </div>
+
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Description</p>
+                <p id="modalProductDescription">Loading...</p>
+            </div>
+
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Notes</p>
+                <p id="modalProductNotes">Loading...</p>
+            </div>
+
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Current Stock</p>
+                <p class="font-medium" id="modalProductStock">0</p>
+            </div>
+
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">SKU</p>
+                <p id="modalProductSKU">N/A</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 px-6 py-3 flex justify-between items-center border-t">
+            <a href="#" id="viewProductLink" class="text-pink-500 hover:text-pink-700 text-sm font-medium transition-colors">
+                View Complete Details
+            </a>
+            <button onclick="closeProductModal()" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
 
 @endsection
 <a href="{{ route('stock-movements.create') }}" class="fixed bottom-6 right-6 z-50 p-4 bg-pink-500 hover:bg-pink-600 text-white rounded-full shadow-lg transition-all">
@@ -214,3 +272,53 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
     </svg>
 </a>
+
+<script>
+    function showProductDetail(element) {
+        const productId = element.getAttribute('data-product-id');
+        const name = element.getAttribute('data-product-name');
+        const category = element.getAttribute('data-product-category');
+        const description = element.getAttribute('data-product-description');
+        const stock = element.getAttribute('data-product-stock');
+        const sku = element.getAttribute('data-product-sku');
+        const notes = element.getAttribute('data-product-notes') || 'No notes available';
+
+        document.getElementById('modalProductName').textContent = name;
+        document.getElementById('modalProductCategory').textContent = category;
+        document.getElementById('modalProductDescription').textContent = description;
+        document.getElementById('modalProductStock').textContent = stock;
+        document.getElementById('modalProductNotes').textContent = notes;
+        document.getElementById('modalProductSKU').textContent = sku;
+
+        document.getElementById('viewProductLink').href = `/products/${productId}`;
+
+        document.getElementById('productDetailModal').classList.remove('hidden');
+
+        if (event) {
+            event.stopPropagation();
+        }
+    }
+
+    function closeProductModal() {
+        document.getElementById('productDetailModal').classList.add('hidden');
+    }
+
+    document.addEventListener('click', function(event) {
+        const modal = document.getElementById('productDetailModal');
+        const modalContent = modal.querySelector('div');
+
+        if (modal && !modal.classList.contains('hidden') && !modalContent.contains(event.target)) {
+            closeProductModal();
+        }
+    });
+
+    document.querySelector('#productDetailModal > div').addEventListener('click', function(event) {
+        event.stopPropagation();
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeProductModal();
+        }
+    });
+</script>
