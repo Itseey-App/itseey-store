@@ -7,10 +7,29 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::withCount('products')->orderBy('name')->paginate(10);
-        return view('categories.index', compact('categories'));
+        // Mengambil parameter pencarian dari request
+        $search = $request->input('search');
+        
+        // Memulai query untuk mengambil kategori
+        $query = Category::withCount('products')->orderBy('name');
+        
+        // Menerapkan filter pencarian jika ada input pencarian
+        if ($search) {
+            // Menambahkan kondisi pencarian untuk kolom name dan description
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
+        // Mengambil data dengan pagination (maksimal 10 data per halaman)
+        // dan menyimpan parameter pencarian di URL saat paginasi
+        $categories = $query->paginate(7)->appends(['search' => $search]);
+        
+        // Mengirim data ke view
+        return view('categories.index', compact('categories', 'search'));
     }
 
     public function create()
