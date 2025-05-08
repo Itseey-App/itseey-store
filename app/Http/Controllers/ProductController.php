@@ -7,16 +7,141 @@ use App\Models\Category;
 use App\Models\StockMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')
-            ->orderBy('name')
-            ->paginate(10);
-
-        return view('products.index', compact('products'));
+        // Mengambil parameter pencarian dan filter dari request
+        $search = $request->input('search');
+        $categoryFilter = $request->input('category_id');
+        $stockFilter = $request->input('stock_filter'); // Filter stok baru: 10+, 1-10, 0
+        $expiryFilter = $request->input('expiry_filter'); // Filter kadaluarsa baru: expired, 10 hari, 30 hari
+        
+        // Mengambil parameter untuk pengurutan
+        $sortBy = $request->input('sort_by', 'name'); // Default: urutkan berdasarkan nama produk
+        $sortDirection = $request->input('sort_direction', 'asc'); // Default: urutan ascending (A-Z)
+        
+        // Memvalidasi field pengurutan yang diizinkan untuk menghindari SQL injection
+        $allowedSortFields = ['name', 'category_name', 'stock', 'expiry_date'];
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'name'; // Default jika field tidak valid
+        }
+        
+        // Memvalidasi arah pengurutan
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc'; // Default jika arah tidak valid
+        }
+        
+        // Memulai query dengan relasi category
+        $query = Product::with('category');
+        
+        // Menerapkan filter pencarian jika ada input pencarian
+        if ($search) {
+            // Menambahkan kondisi pencarian untuk kolom name, description, dan juga nama kategori
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('category', function($categoryQuery) use ($search) {
+                      $categoryQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+        
+        // Filter berdasarkan kategori
+        if ($categoryFilter) {
+            $query->where('category_id', $categoryFilter);
+        }
+        
+        // Filter berdasarkan stok
+        if ($stockFilter) {
+            switch ($stockFilter) {
+                case '10plus':
+                    $query->where('stock', '>=', 10);
+                    break;
+                case '1-10':
+                    $query->whereBetween('stock', [1, 10]);
+                    break;
+                case '0':
+                    $query->where('stock', 0);
+                    break;
+            }
+        }
+        
+        // Filter berdasarkan tanggal kedaluwarsa
+        if ($expiryFilter) {
+            $today = Carbon::today();
+            
+            switch ($expiryFilter) {
+                case 'expired':
+                    // Produk yang sudah kadaluarsa (tanggal kurang dari hari ini)
+                    $query->whereDate('expiry_date', '<', $today);
+                    break;
+                case '10days':
+                    // Produk yang akan kadaluarsa dalam 10 hari ke depan
+                    $query->whereDate('expiry_date', '>=', $today)
+                          ->whereDate('expiry_date', '<=', $today->copy()->addDays(10));
+                    break;
+                case '30days':
+                    // Produk yang akan kadaluarsa dalam 30 hari ke depan
+                    $query->whereDate('expiry_date', '>=', $today)
+                          ->whereDate('expiry_date', '<=', $today->copy()->addDays(30));
+                    break;
+            }
+        }
+        
+        // Menerapkan pengurutan berdasarkan parameter sort_by dan sort_direction
+        switch ($sortBy) {
+            case 'name':
+                // Mengurutkan berdasarkan nama produk
+                $query->orderBy('name', $sortDirection);
+                break;
+                
+            case 'category_name':
+                // Mengurutkan berdasarkan nama kategori
+                // Menggunakan join untuk mengurutkan berdasarkan nama kategori
+                $query->join('categories', 'products.category_id', '=', 'categories.id')
+                      ->orderBy('categories.name', $sortDirection)
+                      ->select('products.*'); // Penting: memilih kolom dari tabel products saja
+                break;
+                
+            case 'stock':
+                // Mengurutkan berdasarkan jumlah stok (bisa dari terkecil ke terbesar atau sebaliknya)
+                $query->orderBy('stock', $sortDirection);
+                break;
+                
+            case 'expiry_date':
+                // Mengurutkan berdasarkan tanggal kedaluwarsa (dari yang sebentar lagi ke yang lama atau sebaliknya)
+                $query->orderBy('expiry_date', $sortDirection);
+                break;
+        }
+        
+        // Mengambil data dengan pagination (maksimal 7 data per halaman)
+        // dan menyimpan parameter pencarian dan pengurutan di URL saat paginasi
+        $products = $query->paginate(7)->appends([
+            'search' => $search,
+            'category_id' => $categoryFilter,
+            'stock_filter' => $stockFilter,
+            'expiry_filter' => $expiryFilter,
+            'sort_by' => $sortBy,
+            'sort_direction' => $sortDirection
+        ]);
+        
+        // Ambil semua kategori untuk filter dropdown
+        $categories = Category::orderBy('name')->get();
+        
+        // Mengirim data ke view, termasuk parameter pencarian, filter, dan pengurutan
+        return view('products.index', compact(
+            'products', 
+            'search', 
+            'categories',
+            'categoryFilter',
+            'stockFilter',
+            'expiryFilter',
+            'sortBy', 
+            'sortDirection'
+        ));
     }
 
     public function create()
