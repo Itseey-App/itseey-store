@@ -81,6 +81,8 @@
     </form>
 </div>
 
+
+
 <!-- Stock Movements Table -->
 <div class="bg-white rounded-lg shadow-md overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200">
@@ -143,11 +145,12 @@
 
     <!-- Pagination -->
     <div class="px-6 py-4 border-t">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center text-sm text-gray-600">
-                <span>Showing {{ $stockMovements->firstItem() ?? 0 }} to {{ $stockMovements->lastItem() ?? 0 }} of {{ $stockMovements->total() }} results</span>
-                <form method="GET" action="{{ route('stock-movements.index') }}" class="inline-flex ml-4">
-                    <select name="per_page" id="per_page" class="ml-4 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm"
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <!-- Results Info -->
+            <div class="flex flex-col sm:flex-row items-center sm:items-start text-sm text-gray-600">
+                <span class="text-center sm:text-left">Showing {{ $stockMovements->firstItem() ?? 0 }} to {{ $stockMovements->lastItem() ?? 0 }} of {{ $stockMovements->total() }} results</span>
+                <form method="GET" action="{{ route('stock-movements.index') }}" class="mt-2 sm:mt-0 sm:inline-flex sm:ml-4">
+                    <select name="per_page" id="per_page" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm"
                         onchange="this.form.submit()">
                         @foreach([15, 30, 50, 100] as $perPage)
                         <option value="{{ $perPage }}" {{ request('per_page', 15) == $perPage ? 'selected' : '' }}>
@@ -165,7 +168,7 @@
 
             <!-- Pagination Links -->
             @if ($stockMovements->hasPages())
-            <div class="flex items-center space-x-1">
+            <div class="flex items-center justify-center space-x-1">
                 <!-- Previous Page Link -->
                 <a href="{{ $stockMovements->previousPageUrl() }}"
                     class="{{ $stockMovements->onFirstPage() ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-gray-50 text-gray-700' }} px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 border">
@@ -174,7 +177,7 @@
                     </svg>
                 </a>
 
-                <!-- Pagination Elements -->
+                <!-- Pagination Elements - Only show on larger screens -->
                 <div class="hidden md:flex space-x-1">
                     @foreach ($stockMovements->getUrlRange(max(1, $stockMovements->currentPage() - 2), min($stockMovements->lastPage(), $stockMovements->currentPage() + 2)) as $page => $url)
                     <a href="{{ $url }}"
@@ -185,8 +188,10 @@
                 </div>
 
                 <!-- Current Page Indicator (Mobile) -->
-                <span class="md:hidden px-4 py-2 rounded-md text-sm font-medium bg-white border">
-                    {{ $stockMovements->currentPage() }} / {{ $stockMovements->lastPage() }}
+                <span class="md:hidden px-4 py-2 rounded-md text-sm font-medium bg-white border flex items-center">
+                    <span class="font-bold text-pink-500">{{ $stockMovements->currentPage() }}</span>
+                    <span class="mx-1 text-gray-500">/</span>
+                    <span>{{ $stockMovements->lastPage() }}</span>
                 </span>
 
                 <!-- Next Page Link -->
