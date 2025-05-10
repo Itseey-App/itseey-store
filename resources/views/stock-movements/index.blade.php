@@ -123,7 +123,18 @@
                     </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">{{ $movement->quantity }}</div>
+                    <div class="flex items-center">
+                        <div class="text-sm text-gray-900">{{ $movement->quantity }}</div>
+                        @if($movement->type === 'in')
+                        <svg class="w-4 h-4 ml-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        @else
+                        <svg class="w-4 h-4 ml-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                        @endif
+                    </div>
                 </td>
                 <td class="px-6 py-4">
                     <div class="text-sm text-gray-500">{{ $movement->notes ?? '-' }}</div>
@@ -247,11 +258,6 @@
                 <p class="text-sm text-gray-500 mb-1">Current Stock</p>
                 <p class="font-medium" id="modalProductStock">0</p>
             </div>
-
-            <div class="mb-4">
-                <p class="text-sm text-gray-500 mb-1">SKU</p>
-                <p id="modalProductSKU">N/A</p>
-            </div>
         </div>
 
         <div class="bg-gray-50 px-6 py-3 flex justify-between items-center border-t">
@@ -288,7 +294,6 @@
         document.getElementById('modalProductDescription').textContent = description;
         document.getElementById('modalProductStock').textContent = stock;
         document.getElementById('modalProductNotes').textContent = notes;
-        document.getElementById('modalProductSKU').textContent = sku;
 
         document.getElementById('viewProductLink').href = `/products/${productId}`;
 
