@@ -47,7 +47,7 @@ class CategoryController extends Controller
         Category::create($validated);
 
         return redirect()->route('categories.index')
-            ->with('success', 'Category created successfully.');
+            ->with('success', 'Kategori berhasil dibuat.');
     }
 
     public function edit(Category $category)
@@ -65,7 +65,7 @@ class CategoryController extends Controller
         $category->update($validated);
 
         return redirect()->route('categories.index')
-            ->with('success', 'Category updated successfully.');
+            ->with('success', 'Kategori berhasil diperbaharui.');
     }
 
     public function destroy(Category $category)
@@ -73,13 +73,13 @@ class CategoryController extends Controller
         // Check if there are products in this category
         if ($category->products()->exists()) {
             return redirect()->route('categories.index')
-                ->with('error', 'Cannot delete category that has products.');
+                ->with('error', 'Tidak dapat menghapus kategori yang memiliki produk.');
         }
 
         $category->delete();
 
         return redirect()->route('categories.index')
-            ->with('success', 'Category deleted successfully.');
+            ->with('success', 'Kategori berhasil dihapus.');
     }
 
     public function bulkDestroy(Request $request)
@@ -94,13 +94,13 @@ class CategoryController extends Controller
 
         if ($categoriesWithProducts > 0) {
             return redirect()->route('categories.index')
-                ->with('error', 'Cannot delete categories that have products.');
+                ->with('error', 'Tidak dapat menghapus kategori yang memiliki produk.');
         }
 
         // Delete categories
         Category::whereIn('id', $categoryIds)->delete();
 
         return redirect()->route('categories.index')
-            ->with('success', count($categoryIds) . ' categories deleted successfully.');
+            ->with('success', count($categoryIds) . ' Kategori berhasil dihapus.');
     }
 }
