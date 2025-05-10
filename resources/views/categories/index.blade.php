@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Categories')
-@section('header', 'Categories')
+@section('title', 'Kategori')
+@section('header', 'Kategori')
 
 @section('content')
 <div class="mb-6">
-    <h2 class="text-xl font-semibold text-pink-700 mb-6">All Categories</h2>
+    <h2 class="text-xl font-semibold text-pink-700 mb-6">Semua Kategori</h2>
 
     <!-- Search Bar -->
     <div class="mb-6 bg-white rounded-lg shadow-md p-4 border-l-4 border-pink-500">
@@ -17,15 +17,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search categories..." class="pl-10 pr-4 py-2 border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 block w-full rounded-md shadow-sm">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Kategori..." class="pl-10 pr-4 py-2 border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 block w-full rounded-md shadow-sm">
                 </div>
                 <div class="ml-4 flex">
                     <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md transition-all">
-                        Search
+                        Cari
                     </button>
                     @if(request('search'))
                     <a href="{{ route('categories.index') }}" class="ml-2 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all">
-                        Clear
+                        Bersihkan
                     </a>
                     @endif
                 </div>
@@ -38,7 +38,7 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
-            Add Category
+            Tambah Katgeori
         </a>
 
         <form id="bulk-delete-form" method="POST" action="{{ route('categories.bulk-destroy') }}" onsubmit="return confirm('Are you sure you want to delete selected categories?');" class="inline-block">
@@ -49,7 +49,7 @@
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                 </svg>
-                Delete Selected
+                Pilih Hapus
             </button>
         </form>
     </div>
@@ -89,7 +89,7 @@
 <!-- Results for Search -->
 @if(request('search'))
     <div class="mb-4 text-sm text-pink-600">
-        <p>Showing results for: <span class="font-semibold">"{{ request('search') }}"</span></p>
+        <p>Menampilkan hasil untuk: <span class="font-semibold">"{{ request('search') }}"</span></p>
     </div>
 @endif
 
@@ -100,10 +100,10 @@
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
                     <input type="checkbox" id="select-all-checkbox" class="rounded text-pink-600 focus:ring-pink-500 h-4 w-4">
                 </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Name</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Description</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Products Count</th>
-                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-pink-700 uppercase tracking-wider">Actions</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Nama</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Deskripsi</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Jumlah Produk</th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-pink-700 uppercase tracking-wider">Tindakan</th>
             </tr>
         </thead>
         <tbody class="bg-white divide-y divide-pink-100">
@@ -156,14 +156,14 @@
                         </svg>
                         <p class="text-gray-500 text-lg">
                             @if(request('search'))
-                                No categories found matching "{{ request('search') }}"
+                                Tidak ada kategori yang ditemukan yang cocok "{{ request('search') }}"
                             @else
-                                No categories found
+                                Tidak ada kategori yang ditemukan
                             @endif
                         </p>
                         @if(request('search'))
                             <a href="{{ route('categories.index') }}" class="mt-3 text-sm text-pink-600 hover:text-pink-800">
-                                Clear search and show all categories
+                                Bersihkan pencarian dan tampilkan semua kategori
                             </a>
                         @endif
                     </div>
