@@ -1,8 +1,8 @@
 
 @extends('layouts.app')
 
-@section('title', 'Products')
-@section('header', 'Products')
+@section('title', 'Produk')
+@section('header', 'Produk')
 
 @section('content')
 <div class="bg-pink-50 p-6 rounded-lg shadow-md mb-8">
@@ -11,7 +11,7 @@
             <svg class="w-6 h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
             </svg>
-            Product Management
+            Produk Manajemen
         </h2>
         
         <!-- Search Bar -->
@@ -21,7 +21,7 @@
                     <input type="text" 
                            name="search" 
                            value="{{ $search ?? '' }}" 
-                           placeholder="Search products..." 
+                           placeholder="Cari Produk..." 
                            class="w-full px-4 py-2 rounded-l-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
                     @if($search)
                     <a href="{{ route('products.index') }}" class="absolute right-12 top-2.5 text-gray-400 hover:text-pink-600">
@@ -44,7 +44,7 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
-            Add Product
+            Tambah Produk
         </a>
     </div>
     
@@ -64,7 +64,7 @@
                 <!-- Category Filter Dropdown -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="px-3 py-1.5 border border-pink-300 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-700 flex items-center text-sm">
-                        <span>Category</span>
+                        <span>Kategori</span>
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
@@ -72,7 +72,7 @@
                     <div x-show="open" @click.away="open = false" class="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white z-10" x-cloak>
                         <div class="py-1 rounded-md bg-white shadow-xs">
                             <!-- Filter will be implemented using the existing category model -->
-                            <a href="{{ route('products.index', ['sort_by' => $sortBy, 'sort_direction' => $sortDirection]) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100">All Categories</a>
+                            <a href="{{ route('products.index', ['sort_by' => $sortBy, 'sort_direction' => $sortDirection]) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100">Semua Kategori</a>
                             @foreach(\App\Models\Category::orderBy('name')->get() as $category)
                                 <a href="{{ route('products.index', ['category_id' => $category->id, 'sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ request('category_id') == $category->id ? 'bg-pink-50 font-medium' : '' }}">
                                     {{ $category->name }}
@@ -85,22 +85,22 @@
                 <!-- Stock Filter -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="px-3 py-1.5 border border-pink-300 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-700 flex items-center text-sm">
-                        <span>Stock</span>
+                        <span>Stok</span>
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div x-show="open" @click.away="open = false" class="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white z-10" x-cloak>
                         <div class="py-1 rounded-md bg-white shadow-xs">
-                            <a href="{{ route('products.index', ['sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100">All</a>
+                            <a href="{{ route('products.index', ['sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100">Semua</a>
                             <a href="{{ route('products.index', ['stock_status' => 'in_stock', 'sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ request('stock_status') == 'in_stock' ? 'bg-pink-50 font-medium' : '' }}">
-                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></span>In Stock (10+)
+                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></span>Stok Dalam (10+)
                             </a>
                             <a href="{{ route('products.index', ['stock_status' => 'low_stock', 'sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ request('stock_status') == 'low_stock' ? 'bg-pink-50 font-medium' : '' }}">
-                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-yellow-500 mr-2"></span>Low Stock (1-10)
+                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-yellow-500 mr-2"></span>Stok Kurang (1-10)
                             </a>
                             <a href="{{ route('products.index', ['stock_status' => 'out_of_stock', 'sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ request('stock_status') == 'out_of_stock' ? 'bg-pink-50 font-medium' : '' }}">
-                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></span>Out of Stock (0)
+                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></span>Tidak Ada Stok (0)
                             </a>
                         </div>
                     </div>
@@ -109,22 +109,22 @@
                 <!-- Expiry Filter -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="px-3 py-1.5 border border-pink-300 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-700 flex items-center text-sm">
-                        <span>Expiry</span>
+                        <span>Kadaluarsa</span>
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div x-show="open" @click.away="open = false" class="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white z-10" x-cloak>
                         <div class="py-1 rounded-md bg-white shadow-xs">
-                            <a href="{{ route('products.index', ['sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100">All</a>
+                            <a href="{{ route('products.index', ['sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100">Semua</a>
                             <a href="{{ route('products.index', ['expiry_status' => 'expired', 'sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ request('expiry_status') == 'expired' ? 'bg-pink-50 font-medium' : '' }}">
-                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></span>Expired
+                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></span>Kadaluarsa
                             </a>
                             <a href="{{ route('products.index', ['expiry_status' => 'expiring_soon', 'sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ request('expiry_status') == 'expiring_soon' ? 'bg-pink-50 font-medium' : '' }}">
-                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-orange-500 mr-2"></span>Expiring Soon (10 days)
+                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-orange-500 mr-2"></span>Kadaluarsa Dalam (10 hari)
                             </a>
                             <a href="{{ route('products.index', ['expiry_status' => 'expiring_month', 'sort_by' => $sortBy, 'sort_direction' => $sortDirection, 'search' => $search ?? '']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ request('expiry_status') == 'expiring_month' ? 'bg-pink-50 font-medium' : '' }}">
-                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-yellow-500 mr-2"></span>Expiring within 30 days
+                                <span class="inline-block h-2.5 w-2.5 rounded-full bg-yellow-500 mr-2"></span>Kedaluwarsa dalam 30 hari
                             </a>
                         </div>
                     </div>
@@ -168,7 +168,7 @@
                     @endif
                     
                     @if(request('category_id') || request('stock_status') || request('expiry_status'))
-                        <a href="{{ route('products.index', ['search' => $search ?? '', 'sort_by' => $sortBy, 'sort_direction' => $sortDirection]) }}" class="text-xs text-pink-600 hover:text-pink-800 underline">Clear all filters</a>
+                        <a href="{{ route('products.index', ['search' => $search ?? '', 'sort_by' => $sortBy, 'sort_direction' => $sortDirection]) }}" class="text-xs text-pink-600 hover:text-pink-800 underline">Bersihkan Semua Filter</a>
                     @endif
                 </div>
                 @endif
@@ -176,18 +176,18 @@
             
             <!-- Sort Options -->
             <div class="flex items-center bg-pink-50 rounded-lg px-3 py-1.5 border border-pink-200">
-                <span class="text-pink-700 text-sm mr-2">Sort by:</span>
+                <span class="text-pink-700 text-sm mr-2">Urutkan Berdasarkan:</span>
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center text-pink-800 text-sm font-medium hover:text-pink-600">
                         <span>
                             @if($sortBy == 'name')
-                                Name
+                                Nama
                             @elseif($sortBy == 'category_name')
-                                Category
+                                Kategori
                             @elseif($sortBy == 'stock')
-                                Stock
+                                Stok
                             @elseif($sortBy == 'expiry_date')
-                                Expiry Date
+                                Tanggal Kadaluarsa
                             @endif
                         </span>
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,7 +201,7 @@
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white z-10" x-cloak>
                         <div class="py-1 rounded-md bg-white shadow-xs">
                             <a href="{{ route('products.index', array_merge(request()->except(['sort_by', 'sort_direction']), ['sort_by' => 'name', 'sort_direction' => $sortBy == 'name' && $sortDirection == 'asc' ? 'desc' : 'asc'])) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ $sortBy == 'name' ? 'bg-pink-50 font-medium' : '' }}">
-                                Name
+                                Nama
                                 @if($sortBy == 'name')
                                     <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         @if($sortDirection == 'asc')
@@ -213,7 +213,7 @@
                                 @endif
                             </a>
                             <a href="{{ route('products.index', array_merge(request()->except(['sort_by', 'sort_direction']), ['sort_by' => 'category_name', 'sort_direction' => $sortBy == 'category_name' && $sortDirection == 'asc' ? 'desc' : 'asc'])) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ $sortBy == 'category_name' ? 'bg-pink-50 font-medium' : '' }}">
-                                Category
+                                Kategori
                                 @if($sortBy == 'category_name')
                                     <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         @if($sortDirection == 'asc')
@@ -225,7 +225,7 @@
                                 @endif
                             </a>
                             <a href="{{ route('products.index', array_merge(request()->except(['sort_by', 'sort_direction']), ['sort_by' => 'stock', 'sort_direction' => $sortBy == 'stock' && $sortDirection == 'asc' ? 'desc' : 'asc'])) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ $sortBy == 'stock' ? 'bg-pink-50 font-medium' : '' }}">
-                                Stock
+                                Stok
                                 @if($sortBy == 'stock')
                                     <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         @if($sortDirection == 'asc')
@@ -237,7 +237,7 @@
                                 @endif
                             </a>
                             <a href="{{ route('products.index', array_merge(request()->except(['sort_by', 'sort_direction']), ['sort_by' => 'expiry_date', 'sort_direction' => $sortBy == 'expiry_date' && $sortDirection == 'asc' ? 'desc' : 'asc'])) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100 {{ $sortBy == 'expiry_date' ? 'bg-pink-50 font-medium' : '' }}">
-                                Expiry Date
+                                Tanggal Kadaluarsa
                                 @if($sortBy == 'expiry_date')
                                     <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         @if($sortDirection == 'asc')
@@ -260,17 +260,17 @@
 <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-pink-100">
     <!-- Table Header -->
     <div class="bg-gradient-to-r from-pink-500 to-pink-400 text-white px-6 py-4">
-        <h3 class="text-lg font-semibold">All Products</h3>
+        <h3 class="text-lg font-semibold">Semua Produk</h3>
     </div>
     
     <table class="min-w-full divide-y divide-pink-100">
         <thead class="bg-pink-50">
             <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Product</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Category</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Stock</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Expiry Date</th>
-                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-pink-700 uppercase tracking-wider">Actions</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Produk</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Kategori</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Stok</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">Tanggal Kadaluarsa</th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-pink-700 uppercase tracking-wider">Tindakan</th>
             </tr>
         </thead>
         <tbody class="bg-white divide-y divide-pink-100">
@@ -399,7 +399,7 @@
                                                     </h3>
                                                     <div class="mt-2">
                                                         <p class="text-sm text-gray-500">
-                                                            Are you sure you want to delete the product "{{ $product->name }}"? This action cannot be undone.
+                                                            Apakah Anda yakin ingin menghapus produk "{{ $product->name }}"? Tindakan ini tidak dapat dibatalkan.
                                                         </p>
                                                     </div>
                                                 </div>
@@ -407,10 +407,10 @@
                                         </div>
                                         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                             <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                                Delete
+                                                Hapus
                                             </button>
                                             <button type="button" @click="confirmDelete = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                                Cancel
+                                                Batalkan
                                             </button>
                                         </div>
                                     </div>
@@ -427,22 +427,22 @@
                         <svg class="w-16 h-16 text-pink-200 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <span class="text-gray-500 text-lg">No products found</span>
+                        <span class="text-gray-500 text-lg">Produk Tidak Ditemukan</span>
                         @if($search)
-                            <p class="text-gray-400 text-sm mt-1">Try changing your search query or</p>
+                            <p class="text-gray-400 text-sm mt-1">Coba ubah kueri pencarian Anda atau</p>
                             <a href="{{ route('products.index') }}" class="text-pink-600 hover:text-pink-800 mt-3 inline-flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                                 </svg>
-                                Clear search
+                                Bersihkan Pencarian
                             </a>
                         @else
-                            <p class="text-gray-400 text-sm mt-1">Start by adding a new product</p>
+                            <p class="text-gray-400 text-sm mt-1">Mulailah dengan menambahkan produk baru</p>
                             <a href="{{ route('products.create') }}" class="mt-4 px-4 py-2 bg-pink-600 text-white rounded hover:bg-pink-700 transition duration-300 inline-flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
-                                Add Product
+                                Tambah Produk
                             </a>
                         @endif
                     </div>
@@ -457,7 +457,7 @@
     <div class="px-6 py-4 border-t border-pink-100 bg-pink-50">
         <div class="flex justify-between items-center">
             <div class="text-sm text-pink-700">
-                Showing {{ $products->firstItem() ?? 0 }} to {{ $products->lastItem() ?? 0 }} of {{ $products->total() }} products
+                Tampilkan {{ $products->firstItem() ?? 0 }} ke {{ $products->lastItem() ?? 0 }} dari{{ $products->total() }} produk
             </div>
             <div>
                 {{ $products->onEachSide(1)->links() }}

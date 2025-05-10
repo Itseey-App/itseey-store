@@ -179,7 +179,7 @@ class ProductController extends Controller
         }
 
         return redirect()->route('products.index')
-            ->with('success', 'Product created successfully.');
+            ->with('success', 'Produk berhasil dibuat.');
     }
 
     public function show(Product $product)
@@ -234,7 +234,7 @@ class ProductController extends Controller
         }
 
         return redirect()->route('products.index')
-            ->with('success', 'Product updated successfully.');
+            ->with('success', 'Produk berhasil diperbaharui.');
     }
 
     public function destroy(Product $product)
@@ -247,7 +247,7 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('products.index')
-            ->with('success', 'Product deleted successfully.');
+            ->with('success', 'Produk berhasil dihapus.');
     }
 
     public function updateStock(Request $request, Product $product)
@@ -262,7 +262,7 @@ class ProductController extends Controller
 
         // Check if we have enough stock for outgoing movements
         if ($type === 'out' && $product->stock < $quantity) {
-            return back()->with('error', 'Not enough stock available.');
+            return back()->with('error', 'Stok tidak cukup tersedia.');
         }
 
         // Update product stock
@@ -279,6 +279,6 @@ class ProductController extends Controller
             'notes' => $validated['notes'] ?? ($type === 'in' ? 'Stock added' : 'Stock removed'),
         ]);
 
-        return back()->with('success', 'Stock updated successfully.');
+        return back()->with('success', 'Stok berhasil diperbaharui.');
     }
 }

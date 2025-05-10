@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Category')
-@section('header', 'Edit Category')
+@section('title', 'Edit Kategori')
+@section('header', 'Edit Kategori')
 
 @section('content')
 <div class="flex justify-between items-center mb-6">
-    <h2 class="text-xl font-semibold text-gray-800">Edit Category: {{ $category->name }}</h2>
+    <h2 class="text-xl font-semibold text-gray-800">Edit Kategori: {{ $category->name }}</h2>
     <a href="{{ route('categories.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition-all inline-flex items-center">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
-        Back to Categories
+        Kembali Ke Kategori
     </a>
 </div>
 
@@ -25,7 +25,7 @@
                 name="name"
                 id="name"
                 :value="old('name', $category->name)"
-                label="Category Name"
+                label="Nama Kategori"
                 required
                 autofocus
             />
@@ -39,7 +39,7 @@
                 name="description"
                 id="description"
                 :value="old('description', $category->description)"
-                label="Description (Optional)"
+                label="Deskripsi Optional"
                 rows="4"
             />
             @error('description')
@@ -48,7 +48,7 @@
         </div>
 
         <div class="flex justify-end">
-            <x-button type="submit" variant="primary">Update Category</x-button>
+            <x-button type="submit" variant="primary">Perbaharui Kategori</x-button>
         </div>
     </form>
 </div>

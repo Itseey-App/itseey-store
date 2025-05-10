@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Product')
-@section('header', 'Edit Product')
+@section('title', 'Edit Produk')
+@section('header', 'Edit Produk')
 
 @section('content')
 <div class="flex justify-between items-center mb-6">
-    <h2 class="text-xl font-semibold text-gray-800">Edit Product: {{ $product->name }}</h2>
+    <h2 class="text-xl font-semibold text-gray-800">Edit Produk: {{ $product->name }}</h2>
     <a href="{{ route('products.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition-all inline-flex items-center">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
-        Back to Products
+        Kembali Ke Produk
     </a>
 </div>
 
@@ -26,7 +26,7 @@
                     name="name"
                     id="name"
                     :value="old('name', $product->name)"
-                    label="Product Name"
+                    label="Nama Produk"
                     required
                     autofocus
                 />
@@ -37,7 +37,7 @@
 
             <div>
                 <x-form-select name="category_id" id="category_id" label="Category" required>
-                    <option value="">Select Category</option>
+                    <option value="">Pilih Kategori</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
                             {{ $category->name }}
@@ -55,7 +55,7 @@
                     name="stock"
                     id="stock"
                     :value="old('stock', $product->stock)"
-                    label="Current Stock"
+                    label="Stok Saat Ini"
                     min="0"
                     required
                 />
@@ -70,7 +70,7 @@
                     name="expiry_date"
                     id="expiry_date"
                     :value="old('expiry_date', $product->expiry_date->format('Y-m-d'))"
-                    label="Expiry Date"
+                    label="Tanggal Kadaluarsa"
                     required
                 />
                 @error('expiry_date')
@@ -79,11 +79,11 @@
             </div>
 
             <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Product Image (Optional)</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Produk (Opsional)</label>
 
                 @if ($product->image)
                     <div class="mb-4">
-                        <p class="text-sm text-gray-500 mb-2">Current Image:</p>
+                        <p class="text-sm text-gray-500 mb-2">Gambar Saat Ini:</p>
                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-32 w-32 object-cover rounded-md">
                     </div>
                 @endif
@@ -95,10 +95,10 @@
                         </svg>
                         <div class="flex text-sm text-gray-600">
                             <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary/80 focus-within:outline-none">
-                                <span>Upload a new image</span>
+                                <span>Mengunggah gambar baru</span>
                                 <input id="image" name="image" type="file" class="sr-only" accept="image/*">
                             </label>
-                            <p class="pl-1">or drag and drop</p>
+                            <p class="pl-1">atau seret dan lepas</p>
                         </div>
                         <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
                     </div>
@@ -113,7 +113,7 @@
                     name="description"
                     id="description"
                     :value="old('description', $product->description)"
-                    label="Description (Optional)"
+                    label="Deskripsi (Opsional)"
                     rows="4"
                 />
                 @error('description')
@@ -123,7 +123,7 @@
         </div>
 
         <div class="flex justify-end mt-6">
-            <x-button type="submit" variant="primary">Update Product</x-button>
+            <x-button type="submit" variant="primary">Perbaharui Produk</x-button>
         </div>
     </form>
 </div>
