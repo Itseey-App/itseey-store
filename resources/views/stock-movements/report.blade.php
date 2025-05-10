@@ -43,8 +43,7 @@
                     name="from_date"
                     id="from_date"
                     :value="$fromDate"
-                    label="Dari Tanggal"
-                />
+                    label="Dari Tanggal" />
             </div>
             <div>
                 <x-form-input
@@ -52,8 +51,7 @@
                     name="to_date"
                     id="to_date"
                     :value="$toDate"
-                    label="Sampai Tanggal"
-                />
+                    label="Sampai Tanggal" />
             </div>
             <div class="flex items-end">
                 <x-button type="submit" variant="primary" class="w-full">Buat Laporan</x-button>
@@ -69,91 +67,91 @@
     </div>
 
     @if($groupedData->isEmpty())
-        <div class="p-6 text-center text-gray-500">
-            Tidak ada data tersedia untuk periode yang dipilih.
-        </div>
+    <div class="p-6 text-center text-gray-500">
+        Tidak ada data tersedia untuk periode yang dipilih.
+    </div>
     @else
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Periode</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Masuk (Total)</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Keluar (Total)</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perubahan Bersih</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach($groupedData as $period => $movements)
-                        @php
-                            $stockIn = $movements->where('type', 'in')->sum('quantity');
-                            $stockOut = $movements->where('type', 'out')->sum('quantity');
-                            $netChange = $stockIn - $stockOut;
-                        @endphp
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $period }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">+{{ $stockIn }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">-{{ $stockOut }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium {{ $netChange >= 0 ? 'text-green-600' : 'text-red-600' }}">
-                                {{ $netChange >= 0 ? '+' : '' }}{{ $netChange }}
-                            </td>
-                        </tr>
+    @php
+    $totalIn = $groupedData->flatten()->where('type', 'in')->sum('quantity');
+    $totalOut = $groupedData->flatten()->where('type', 'out')->sum('quantity');
+    $totalNet = $totalIn - $totalOut;
+    @endphp
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Periode</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Masuk (Total)</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Keluar (Total)</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perubahan Bersih</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach($groupedData as $period => $movements)
+                @php
+                $stockIn = $movements->where('type', 'in')->sum('quantity');
+                $stockOut = $movements->where('type', 'out')->sum('quantity');
+                $netChange = $stockIn - $stockOut;
+                @endphp
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $period }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">+{{ $stockIn }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">-{{ $stockOut }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium {{ $netChange >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                        {{ $netChange >= 0 ? '+' : '' }}{{ $netChange }}
+                    </td>
+                </tr>
 
-                        <!-- Detail Pergerakan -->
-                        <tr>
-                            <td colspan="4" class="px-6 py-4">
-                                <div class="border-t border-gray-200 pt-2">
-                                    <h4 class="text-xs font-medium text-gray-500 uppercase mb-2">Detail Pergerakan</h4>
-                                    <table class="min-w-full divide-y divide-gray-200">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Produk</th>
-                                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Tipe</th>
-                                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Jumlah</th>
-                                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Tanggal & Waktu</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            @foreach($movements as $movement)
-                                                <tr>
-                                                    <td class="px-3 py-2 whitespace-nowrap text-xs">{{ $movement->product->name }}</td>
-                                                    <td class="px-3 py-2 whitespace-nowrap text-xs">
-                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $movement->type === 'in' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                            {{ $movement->type === 'in' ? 'Masuk' : 'Keluar' }}
-                                                        </span>
-                                                    </td>
-                                                    <td class="px-3 py-2 whitespace-nowrap text-xs">{{ $movement->quantity }}</td>
-                                                    <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-500">{{ $movement->created_at->format('Y-m-d H:i') }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-                <tfoot class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                        <td class="px-6 py-3 whitespace-nowrap text-sm font-bold text-green-600">
-                            +{{ $groupedData->flatten()->where('type', 'in')->sum('quantity') }}
-                        </td>
-                        <td class="px-6 py-3 whitespace-nowrap text-sm font-bold text-red-600">
-                            -{{ $groupedData->flatten()->where('type', 'out')->sum('quantity') }}
-                        </td>
-                        <td class="px-6 py-3 whitespace-nowrap text-sm font-bold {{ $totalNet >= 0 ? 'text-green-600' : 'text-red-600' }}">
-                            @php
-                                $totalIn = $groupedData->flatten()->where('type', 'in')->sum('quantity');
-                                $totalOut = $groupedData->flatten()->where('type', 'out')->sum('quantity');
-                                $totalNet = $totalIn - $totalOut;
-                            @endphp
-                            {{ $totalNet >= 0 ? '+' : '' }}{{ $totalNet }}
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+                <!-- Detail Pergerakan -->
+                <tr>
+                    <td colspan="4" class="px-6 py-4">
+                        <div class="border-t border-gray-200 pt-2">
+                            <h4 class="text-xs font-medium text-gray-500 uppercase mb-2">Detail Pergerakan</h4>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Produk</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Tipe</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Jumlah</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Tanggal & Waktu</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach($movements as $movement)
+                                    <tr>
+                                        <td class="px-3 py-2 whitespace-nowrap text-xs">{{ $movement->product->name }}</td>
+                                        <td class="px-3 py-2 whitespace-nowrap text-xs">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $movement->type === 'in' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                {{ $movement->type === 'in' ? 'Masuk' : 'Keluar' }}
+                                            </span>
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap text-xs">{{ $movement->quantity }}</td>
+                                        <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-500">{{ $movement->created_at->format('Y-m-d H:i') }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+            <tfoot class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                    <td class="px-6 py-3 whitespace-nowrap text-sm font-bold text-green-600">
+                        +{{ $groupedData->flatten()->where('type', 'in')->sum('quantity') }}
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap text-sm font-bold text-red-600">
+                        -{{ $groupedData->flatten()->where('type', 'out')->sum('quantity') }}
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap text-sm font-bold {{ $totalNet >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                        {{ $totalNet >= 0 ? '+' : '' }}{{ $totalNet }}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
     @endif
 </div>
 @endsection
