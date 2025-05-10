@@ -5,12 +5,9 @@
 @section('content')
 <div class="min-h-screen flex flex-col justify-center bg-gradient-to-br from-pink-200 to-pink-50 py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="flex justify-center">
-            <svg class="h-12 w-auto text-pink-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
+        <div class="mt-3 text-center">
+            <img src="{{ asset('storage/itseeystore-logo.png') }}" alt="Itseey Store" class="h-16 w-auto mx-auto">
         </div>
-        <h1 class="mt-3 text-3xl font-extrabold text-center text-pink-700">Itseey Store</h1>
         <h2 class="mt-2 text-center text-lg text-pink-500">Admin Dashboard</h2>
     </div>
 

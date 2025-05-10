@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Itseey Store - Sistem Manajemen Skincare Premium">
     <title>Itseey Store - Sistem Manajemen Skincare Premium</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('storage/itseeystore-favicon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('storage/itseeystore-favicon.png') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,7 +58,7 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 flex items-center">
-                        <span class="text-2xl font-bold bg-gradient-to-r from-pink-500 to-pink-600 text-transparent bg-clip-text">Itseey</span>
+                        <img src="{{ asset('storage/itseeystore-logo.png') }}" alt="Itseey Store" class="h-8 w-auto">
                     </div>
                 </div>
                 <div class="hidden md:flex items-center space-x-4">
@@ -75,7 +80,7 @@
                 <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
                     <h1>
                         <span class="mt-1 block text-4xl tracking-tight font-extrabold sm:text-5xl xl:text-6xl">
-                            <span class="block bg-gradient-to-r from-pink-500 to-pink-600 text-transparent bg-clip-text">Itseey Store</span>
+                            <img src="{{ asset('storage/itseeystore-logo.png') }}" alt="Itseey Store" class="h-20 w-auto brightness-110 contrast-125">
                             <span class="block text-pink-500 text-3xl mt-3 font-light">Sistem Manajemen Skincare</span>
                         </span>
                     </h1>
