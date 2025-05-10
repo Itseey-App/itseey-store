@@ -101,22 +101,27 @@ class StockMovementController extends Controller
         switch ($reportType) {
             case 'daily':
                 $dateFormat = 'Y-m-d';
+                $displayFormat = 'd M Y';
                 $title = 'Daily Stock Movement Report';
                 break;
             case 'weekly':
-                $dateFormat = 'Y-W'; // Year and week number
+                $dateFormat = 'Y-W';
+                $displayFormat = '\W\e\e\k W, Y';
                 $title = 'Weekly Stock Movement Report';
                 break;
             case 'monthly':
                 $dateFormat = 'Y-m';
+                $displayFormat = 'M Y';
                 $title = 'Monthly Stock Movement Report';
                 break;
             case 'yearly':
                 $dateFormat = 'Y';
+                $displayFormat = 'Y';
                 $title = 'Yearly Stock Movement Report';
                 break;
             default:
                 $dateFormat = 'Y-m-d';
+                $displayFormat = 'd M Y';
                 $title = 'Stock Movement Report';
         }
 
@@ -128,25 +133,38 @@ class StockMovementController extends Controller
             return Carbon::parse($item->created_at)->format($dateFormat);
         });
 
+        $formattedGroupedData = collect();
+        foreach ($groupedData as $key => $items) {
+            if ($reportType === 'weekly') {
+                list($year, $week) = explode('-', $key);
+                $newKey = "Week $week, $year";
+            } else {
+                $date = Carbon::createFromFormat($dateFormat, $key);
+                $newKey = $date->format($displayFormat);
+            }
+
+            $formattedGroupedData->put($newKey, $items);
+        }
+
         // For export to PDF
         if ($request->has('export_pdf')) {
             $pdf = PDF::loadView('stock-movements.report-pdf', [
                 'title' => $title,
-                'fromDate' => $from->format('Y-m-d'),
-                'toDate' => $to->format('Y-m-d'),
+                'fromDate' => $from->format('d M Y'),
+                'toDate' => $to->format('d M Y'),
                 'reportType' => $reportType,
-                'groupedData' => $groupedData,
+                'groupedData' => $formattedGroupedData,
             ]);
 
-            return $pdf->download("stock-movement-report-{$reportType}-{$from->format('Y-m-d')}-to-{$to->format('Y-m-d')}.pdf");
+            return $pdf->download("stock-movement-report-{$reportType}-{$from->format('d-M-Y')}-to-{$to->format('d-M-Y')}.pdf");
         }
 
         return view('stock-movements.report', [
             'title' => $title,
-            'fromDate' => $from->format('Y-m-d'),
-            'toDate' => $to->format('Y-m-d'),
+            'fromDate' => $from->format('d M Y'),
+            'toDate' => $to->format('d M Y'),
             'reportType' => $reportType,
-            'groupedData' => $groupedData,
+            'groupedData' => $formattedGroupedData,
         ]);
     }
 }
