@@ -13,15 +13,15 @@
             </svg>
             Produk Manajemen
         </h2>
-        
+
         <!-- Search Bar -->
         <div class="w-full md:w-1/3 mb-4 md:mb-0">
             <form action="{{ route('products.index') }}" method="GET" class="flex">
                 <div class="relative flex-grow">
-                    <input type="text" 
-                           name="search" 
-                           value="{{ $search ?? '' }}" 
-                           placeholder="Cari Produk..." 
+                    <input type="text"
+                           name="search"
+                           value="{{ $search ?? '' }}"
+                           placeholder="Cari Produk..."
                            class="w-full px-4 py-2 rounded-l-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
                     @if($search)
                     <a href="{{ route('products.index') }}" class="absolute right-12 top-2.5 text-gray-400 hover:text-pink-600">
@@ -38,7 +38,7 @@
                 </button>
             </form>
         </div>
-        
+
         <!-- Add Product Button -->
         <a href="{{ route('products.create') }}" class="btn bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg flex items-center transition duration-300 shadow-md transform hover:scale-105">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -47,20 +47,20 @@
             Tambah Produk
         </a>
     </div>
-    
+
     <!-- Search Results Stats -->
     @if($search)
     <div class="mb-4 text-sm text-pink-700 italic">
         <p>Showing results for: "{{ $search }}" ({{ $products->total() }} {{ Str::plural('product', $products->total()) }} found)</p>
     </div>
     @endif
-    
+
     <!-- Enhanced Filter Options -->
     <div class="mt-4 bg-white p-4 rounded-lg border border-pink-200 shadow-sm">
         <div class="flex flex-col md:flex-row items-center justify-between">
             <div class="flex flex-wrap items-center gap-2 mb-3 md:mb-0">
                 <span class="text-pink-700 font-medium">Filters:</span>
-                
+
                 <!-- Category Filter Dropdown -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="px-3 py-1.5 border border-pink-300 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-700 flex items-center text-sm">
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Stock Filter -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="px-3 py-1.5 border border-pink-300 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-700 flex items-center text-sm">
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Expiry Filter -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="px-3 py-1.5 border border-pink-300 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-700 flex items-center text-sm">
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Active Filters -->
                 @if(request('category_id') || request('stock_status') || request('expiry_status'))
                 <div class="ml-2 flex flex-wrap gap-2 items-center">
@@ -144,7 +144,7 @@
                             </a>
                         </div>
                     @endif
-                    
+
                     @if(request('stock_status'))
                         <div class="flex items-center bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-xs">
                             <span>Stock: {{ ucfirst(str_replace('_', ' ', request('stock_status'))) }}</span>
@@ -155,7 +155,7 @@
                             </a>
                         </div>
                     @endif
-                    
+
                     @if(request('expiry_status'))
                         <div class="flex items-center bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-xs">
                             <span>Expiry: {{ ucfirst(str_replace('_', ' ', request('expiry_status'))) }}</span>
@@ -166,14 +166,14 @@
                             </a>
                         </div>
                     @endif
-                    
+
                     @if(request('category_id') || request('stock_status') || request('expiry_status'))
                         <a href="{{ route('products.index', ['search' => $search ?? '', 'sort_by' => $sortBy, 'sort_direction' => $sortDirection]) }}" class="text-xs text-pink-600 hover:text-pink-800 underline">Bersihkan Semua Filter</a>
                     @endif
                 </div>
                 @endif
             </div>
-            
+
             <!-- Sort Options -->
             <div class="flex items-center bg-pink-50 rounded-lg px-3 py-1.5 border border-pink-200">
                 <span class="text-pink-700 text-sm mr-2">Urutkan Berdasarkan:</span>
@@ -262,7 +262,7 @@
     <div class="bg-gradient-to-r from-pink-500 to-pink-400 text-white px-6 py-4">
         <h3 class="text-lg font-semibold">Semua Produk</h3>
     </div>
-    
+
     <table class="min-w-full divide-y divide-pink-100">
         <thead class="bg-pink-50">
             <tr>
@@ -316,7 +316,7 @@
                     @php
                         $daysUntilExpiry = $product->getDaysUntilExpiry();
                     @endphp
-                    <div class="text-sm text-gray-900">{{ $product->expiry_date->format('l, d F Y') }}</div>
+                    <div class="text-sm text-gray-900">{{ \Carbon\Carbon::parse($product->expiry_date)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}</div>
 
                     @if ($daysUntilExpiry <= 30)
                         <span class="inline-flex items-center px-2.5 py-0.5 mt-1 rounded-full text-xs font-medium
@@ -468,9 +468,9 @@
 </div>
 
 @if(session('success'))
-<div class="fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md" 
-     x-data="{ show: true }" 
-     x-show="show" 
+<div class="fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md"
+     x-data="{ show: true }"
+     x-show="show"
      x-init="setTimeout(() => show = false, 4000)"
      x-transition:leave="transition ease-in duration-300"
      x-transition:leave-start="opacity-100"

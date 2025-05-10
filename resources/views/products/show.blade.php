@@ -37,7 +37,7 @@
 
                         @php $daysUntilExpiry = $product->getDaysUntilExpiry(); @endphp
                         <p class="text-sm text-gray-500 mt-1">
-                            Expires on: <span class="font-medium text-gray-700">{{ $product->expiry_date->format('l, d F Y') }}</span>
+                            Expires on: <span class="font-medium text-gray-700">{{ \Carbon\Carbon::parse($product->expiry_date)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}</span>
                             @if ($daysUntilExpiry <= 30)
                                 <span class="inline-flex items-center ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium
                                     {{ $daysUntilExpiry <= 0 ? 'bg-red-100 text-red-800' : ($daysUntilExpiry <= 10 ? 'bg-orange-100 text-orange-800' : 'bg-yellow-100 text-yellow-800') }}">
