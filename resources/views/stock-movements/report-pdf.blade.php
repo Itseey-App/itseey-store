@@ -188,25 +188,24 @@
         <table class="header-table">
             <tr>
                 <td class="header-logo-cell">
-                    <img src="https://placehold.co/40x40/FFFFFF/000000?text=L" alt="Logo" style="display: block; margin-left: 40px;">
+                    <img src="/storage/itseeystore-favicon.png" alt="Logo" style="display: block; margin-left: 40px;">
                 </td>
                 <td class="header-text">
-                    Daily Stock Movement Report | Laporan Transaksi
+                    Laporan Pencatatan Stok Harian | Laporan Transaksi
                 </td>
             </tr>
         </table>
     </div>
 
-
     <div class="content">
         <table class="report-header">
             <tr>
                 <td class="report-header-left">
-                    <div class="report-label">Displaying Itseey Store report from</div>
-                    <div class="report-value">{{ $startDate ?? $groupedData->keys()->first() }} - {{ $endDate ?? $groupedData->keys()->last() }}</div>
+                    <div class="report-label">Menampilkan laporan Itseey Store dari</div>
+                    <div class="report-value">{{ $fromDate ?? $groupedData->keys()->first() }} - {{ $toDate ?? $groupedData->keys()->last() }}</div>
                 </td>
                 <td class="report-header-right">
-                    <div class="report-label">Latest balance {{ now()->format('d M Y') }}</div>
+                    <div class="report-label">Stok terakhir per {{ now()->format('d M Y') }}</div>
                     <div class="report-value">
                         @php
                         $totalIn = $groupedData->flatten()->where('type', 'in')->sum('quantity');
@@ -220,15 +219,15 @@
         </table>
 
         @if($groupedData->isEmpty())
-        <p>No data available for the selected period.</p>
+        <p>Tidak ada data untuk periode yang dipilih.</p>
         @else
         <table>
             <thead>
                 <tr>
-                    <th>Period</th>
-                    <th>Stock In (Total)</th>
-                    <th>Stock Out (Total)</th>
-                    <th>Net Change</th>
+                    <th>Periode</th>
+                    <th>Stok Masuk (Total)</th>
+                    <th>Stok Keluar (Total)</th>
+                    <th>Perubahan Bersih</th>
                 </tr>
             </thead>
             <tbody>
@@ -258,7 +257,7 @@
                         -{{ $groupedData->flatten()->where('type', 'out')->sum('quantity') }}
                     </td>
                     <td style="font-weight: bold;
-                            {{ ($groupedData->flatten()->where('type', 'in')->sum('quantity') - $groupedData->flatten()->where('type', 'out')->sum('quantity')) >= 0 ? 'color: #16a34a;' : 'color: #dc2626;' }}">
+                        {{ ($groupedData->flatten()->where('type', 'in')->sum('quantity') - $groupedData->flatten()->where('type', 'out')->sum('quantity')) >= 0 ? 'color: #16a34a;' : 'color: #dc2626;' }}">
                         @php
                         $totalIn = $groupedData->flatten()->where('type', 'in')->sum('quantity');
                         $totalOut = $groupedData->flatten()->where('type', 'out')->sum('quantity');
@@ -269,18 +268,18 @@
                 </tr>
             </tfoot>
         </table>
-        <h3>Detailed Movement Records</h3>
+        <h3>Rincian Pencatatan Stok</h3>
         @foreach($groupedData as $period => $movements)
         <h4>{{ $period }}</h4>
         <table>
             <thead>
                 <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Type</th>
-                    <th>Quantity</th>
-                    <th>Date & Time</th>
-                    <th>Notes</th>
+                    <th>Produk</th>
+                    <th>Kategori</th>
+                    <th>Jenis</th>
+                    <th>Kuantitas</th>
+                    <th>Tanggal & Waktu</th>
+                    <th>Catatan</th>
                 </tr>
             </thead>
             <tbody>
@@ -288,7 +287,7 @@
                 <tr>
                     <td>{{ $movement->product->name }}</td>
                     <td>{{ $movement->product->category->name }}</td>
-                    <td>{{ $movement->type === 'in' ? 'Stock In' : 'Stock Out' }}</td>
+                    <td>{{ $movement->type === 'in' ? 'Stok Masuk' : 'Stok Keluar' }}</td>
                     <td>{{ $movement->quantity }}</td>
                     <td>
                         <div style="line-height: 1.2;">
@@ -306,8 +305,7 @@
 
         <div class="info-penting">
             <strong>Info Penting</strong>
-            <p>Dokumen ini adalah daftar Riwayat Transaksi Itseey Store dan dihasilkan sesuai dengan transaksi yang dilakukan pada periode yang dinyatakan dalam laporan. Transaksi dapat
-                ditampilkan berdasarkan hasil pencarian dan filter yang diterapkan oleh Pengguna.</p>
+            <p>Dokumen ini merupakan daftar Riwayat Transaksi Itseey Store dan dihasilkan berdasarkan transaksi yang dilakukan pada periode yang tercantum dalam laporan. Transaksi dapat ditampilkan berdasarkan hasil pencarian dan filter yang diterapkan oleh pengguna.</p>
         </div>
 
         <div class="footer-wrapper">
@@ -316,7 +314,7 @@
                     <td class="footer-left">
                         <span class="footer-logo-text">
                             <img src="https://placehold.co/20x20" alt="Logo">
-                            Skincare Management System &copy; 2025 | Semua Hak Dilindungi
+                            Sistem Manajemen Skincare &copy; 2025 | Semua Hak Dilindungi
                         </span>
                     </td>
                     <td class="footer-right">
