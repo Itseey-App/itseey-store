@@ -86,8 +86,8 @@ class StockMovementController extends Controller
     public function report(Request $request)
     {
         $reportType = $request->input('report_type', 'daily');
-        $fromDate = $request->input('from_date', Carbon::now()->startOfDay()->format('Y-m-d'));
-        $toDate = $request->input('to_date', Carbon::now()->endOfDay()->format('Y-m-d'));
+        $fromDate = $request->input('from_date', Carbon::today()->format('Y-m-d'));
+        $toDate = $request->input('to_date', Carbon::today()->format('Y-m-d'));
 
         // Parse dates
         $from = Carbon::parse($fromDate)->startOfDay();

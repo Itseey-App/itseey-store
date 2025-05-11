@@ -13,8 +13,8 @@
         html,
         body {
             font-family: Arial, sans-serif;
-            font-size: 12px;
-            line-height: 1.5;
+            font-size: 14px;
+            line-height: 1.6;
             color: #333;
             margin: 0;
             padding: 0;
@@ -43,35 +43,35 @@
             vertical-align: middle;
         }
 
-        .header-logo-cell {
-            width: 40px;
+        .header-logo-cell img {
+            width: 200px;
         }
 
         .header-text {
             text-align: right;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
         }
 
         .content {
-            padding: 20px 40px 100px 40px;
+            padding: 25px 80px 120px 80px;
             position: relative;
         }
 
         .header-text h1 {
-            font-size: 20px;
+            font-size: 24px;
             margin: 0 0 5px 0;
             font-weight: bold;
         }
 
         .header-text p {
-            font-size: 14px;
+            font-size: 16px;
             margin: 0;
         }
 
         .report-header {
-            margin-top: 10px;
-            margin-bottom: 20px;
+            margin-top: 15px;
+            margin-bottom: 25px;
             border: none;
             width: 100%;
         }
@@ -92,33 +92,35 @@
         }
 
         .report-label {
-            font-size: 14px;
+            font-size: 16px;
             color: #666;
         }
 
         .report-value {
-            font-size: 17px;
+            font-size: 20px;
             font-weight: bold;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 25px 0;
         }
 
         th {
             background-color: #fdf2f8;
-            padding: 10px;
+            padding: 12px;
             text-align: left;
             color: #db2777;
+            font-size: 15px;
         }
 
         td {
-            padding: 10px;
+            padding: 12px;
             border: 0px solid #fbcfe8;
             vertical-align: top;
+            font-size: 14px;
         }
 
         .summary-table th {
@@ -134,20 +136,25 @@
         }
 
         .info-penting {
-            margin: 30px 0;
+            margin: 35px 0;
             color: #666;
-            font-size: 11px;
+            font-size: 13px;
             border-radius: 5px;
+            padding: 15px;
+            background-color: #fdf2f8;
+            border-left: 4px solid #ec4899;
         }
 
         .info-penting strong {
-            font-size: 15px;
+            font-size: 17px;
             font-weight: semibold;
+            display: block;
+            margin-bottom: 5px;
         }
 
         .footer-wrapper {
             position: absolute;
-            bottom: 20px;
+            bottom: 25px;
             left: 0;
             right: 0;
             padding: 0 40px;
@@ -155,7 +162,7 @@
 
         .footer-table {
             width: 100%;
-            font-size: 10px;
+            font-size: 12px;
             color: #666;
             border-collapse: collapse;
         }
@@ -171,7 +178,9 @@
 
         .footer-logo-text img {
             vertical-align: middle;
-            margin-right: 6px;
+            margin-right: 8px;
+            width: 50px;
+            height: 50px;
         }
 
         .footer-right {
@@ -179,6 +188,19 @@
             vertical-align: middle;
             font-weight: bold;
             width: 30%;
+        }
+
+        h3 {
+            font-size: 18px;
+            color: #db2777;
+            margin-top: 30px;
+        }
+
+        h4 {
+            font-size: 16px;
+            color: #666;
+            border-bottom: 1px solid #fbcfe8;
+            padding-bottom: 5px;
         }
     </style>
 </head>
@@ -188,10 +210,10 @@
         <table class="header-table">
             <tr>
                 <td class="header-logo-cell">
-                    <img src="/storage/itseeystore-favicon.png" alt="Logo" style="display: block; margin-left: 40px;">
+                    <img src="{{ public_path('storage/itseeystore-logo.jpg')}}" alt="Logo" style="display: block; margin-left: 40px;">
                 </td>
                 <td class="header-text">
-                    Laporan Pencatatan Stok Harian | Laporan Transaksi
+                    Laporan Pencatatan Stok | Laporan Transaksi
                 </td>
             </tr>
         </table>
@@ -278,7 +300,7 @@
                     <th>Kategori</th>
                     <th>Jenis</th>
                     <th>Kuantitas</th>
-                    <th>Tanggal & Waktu</th>
+                    <th>Tanggal</th>
                     <th>Catatan</th>
                 </tr>
             </thead>
@@ -313,7 +335,7 @@
                 <tr>
                     <td class="footer-left">
                         <span class="footer-logo-text">
-                            <img src="https://placehold.co/20x20" alt="Logo">
+                            <img src="{{ public_path('storage/itseeystore-1080.jpg')}}" alt="Logo">
                             Sistem Manajemen Skincare &copy; 2025 | Semua Hak Dilindungi
                         </span>
                     </td>
