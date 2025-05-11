@@ -25,7 +25,7 @@
 
         .header {
             background-color: #ec4899;
-            padding: 15px 30px;
+            padding: 10px 30px;
             margin: 0;
             border-bottom-left-radius: 300px;
             color: white;
@@ -43,8 +43,8 @@
             vertical-align: middle;
         }
 
-        .header-logo-cell {
-            width: 50px;
+        .header-logo-cell img {
+            width: 200px;
         }
 
         .header-text {
@@ -179,8 +179,8 @@
         .footer-logo-text img {
             vertical-align: middle;
             margin-right: 8px;
-            width: 20px;
-            height: 20px;
+            width: 50px;
+            height: 50px;
         }
 
         .footer-right {
@@ -210,10 +210,10 @@
         <table class="header-table">
             <tr>
                 <td class="header-logo-cell">
-                    <img src="/storage/itseeystore-favicon.png" alt="Logo" style="display: block; margin-left: 40px;">
+                    <img src="{{ public_path('storage/itseeystore-logo.jpg')}}" alt="Logo" style="display: block; margin-left: 40px;">
                 </td>
                 <td class="header-text">
-                    Laporan Pencatatan Stok Harian | Laporan Transaksi
+                    Laporan Pencatatan Stok | Laporan Transaksi
                 </td>
             </tr>
         </table>
@@ -335,7 +335,7 @@
                 <tr>
                     <td class="footer-left">
                         <span class="footer-logo-text">
-                            <img src="/storage/itseeystore-favicon.png" alt="Logo">
+                            <img src="{{ public_path('storage/itseeystore-1080.jpg')}}" alt="Logo">
                             Sistem Manajemen Skincare &copy; 2025 | Semua Hak Dilindungi
                         </span>
                     </td>
