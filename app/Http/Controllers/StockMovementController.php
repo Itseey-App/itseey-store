@@ -102,27 +102,32 @@ class StockMovementController extends Controller
             case 'daily':
                 $dateFormat = 'Y-m-d';
                 $displayFormat = 'd M Y';
-                $title = 'Daily Stock Movement Report';
+                $title = 'Laporan Pergerakan Stok Harian';
+
                 break;
             case 'weekly':
                 $dateFormat = 'Y-W';
                 $displayFormat = '\W\e\e\k W, Y';
-                $title = 'Weekly Stock Movement Report';
+                $title = 'Laporan Pergerakan Stok Mingguan';
+            
                 break;
             case 'monthly':
                 $dateFormat = 'Y-m';
                 $displayFormat = 'M Y';
-                $title = 'Monthly Stock Movement Report';
+                $title = 'Laporan Pergerakan Stok Bulanan';
+
                 break;
             case 'yearly':
                 $dateFormat = 'Y';
                 $displayFormat = 'Y';
-                $title = 'Yearly Stock Movement Report';
+                $title = 'Laporan Pergerakan Stok Tahunan';
+
                 break;
             default:
                 $dateFormat = 'Y-m-d';
                 $displayFormat = 'd M Y';
-                $title = 'Stock Movement Report';
+                $title = 'Laporan Pergerakan Stok';
+
         }
 
         // Get data
