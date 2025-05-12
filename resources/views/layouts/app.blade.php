@@ -6,6 +6,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <title>{{ config('app.name', 'Itseey Store') }} - @yield('title', 'Manajemen Skincare')</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('storage/itseeystore-favicon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('storage/itseeystore-favicon.png') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-50">
@@ -49,7 +54,7 @@
                     <!-- Mobile Sidebar Content -->
                     <div class="flex flex-col flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                         <div class="flex items-center flex-shrink-0 px-4">
-                            <h1 class="text-xl font-bold text-primary">Itseey Store</h1>
+                            <img src="{{ asset('storage/itseeystore-logo.png') }}" alt="Itseey Store" class="h-8 w-32">
                         </div>
                         <nav class="flex-1 px-2 mt-5 space-y-1 bg-white">
                             <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('dashboard') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
@@ -109,7 +114,7 @@
                     <div class="flex flex-col flex-1 min-h-0 bg-white border-r border-gray-200">
                         <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
                             <div class="flex items-center flex-shrink-0 px-4">
-                                <h1 class="text-xl font-bold text-primary">Itseey Store</h1>
+                                <img src="{{ asset('storage/itseeystore-logo.png') }}" alt="Itseey Store" class="h-8 w-32">
                             </div>
                             <nav class="flex-1 px-2 mt-8 space-y-2 bg-white">
                                 <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('dashboard') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
