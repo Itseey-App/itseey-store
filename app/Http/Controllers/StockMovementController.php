@@ -86,8 +86,8 @@ class StockMovementController extends Controller
     public function report(Request $request)
     {
         $reportType = $request->input('report_type', 'daily');
-        $fromDate = $request->input('from_date', Carbon::now()->startOfDay()->format('Y-m-d'));
-        $toDate = $request->input('to_date', Carbon::now()->endOfDay()->format('Y-m-d'));
+        $fromDate = $request->input('from_date', Carbon::today()->format('Y-m-d'));
+        $toDate = $request->input('to_date', Carbon::today()->format('Y-m-d'));
 
         // Parse dates
         $from = Carbon::parse($fromDate)->startOfDay();
@@ -101,23 +101,28 @@ class StockMovementController extends Controller
         switch ($reportType) {
             case 'daily':
                 $dateFormat = 'Y-m-d';
-                $title = 'Daily Stock Movement Report';
+                $displayFormat = 'd M Y';
+                $title = 'Laporan Pergerakan Stok Harian';
                 break;
             case 'weekly':
-                $dateFormat = 'Y-W'; // Year and week number
-                $title = 'Weekly Stock Movement Report';
+                $dateFormat = 'Y-W';
+                $displayFormat = '\W\e\e\k W, Y';
+                $title = 'Laporan Pergerakan Stok Mingguan';
                 break;
             case 'monthly':
                 $dateFormat = 'Y-m';
-                $title = 'Monthly Stock Movement Report';
+                $displayFormat = 'M Y';
+                $title = 'Laporan Pergerakan Stok Bulanan';
                 break;
             case 'yearly':
                 $dateFormat = 'Y';
-                $title = 'Yearly Stock Movement Report';
+                $displayFormat = 'Y';
+                $title = 'Laporan Pergerakan Stok Tahunan';
                 break;
             default:
                 $dateFormat = 'Y-m-d';
-                $title = 'Stock Movement Report';
+                $displayFormat = 'd M Y';
+                $title = 'Laporan Pergerakan Stok';
         }
 
         // Get data
@@ -128,25 +133,38 @@ class StockMovementController extends Controller
             return Carbon::parse($item->created_at)->format($dateFormat);
         });
 
+        $formattedGroupedData = collect();
+        foreach ($groupedData as $key => $items) {
+            if ($reportType === 'weekly') {
+                list($year, $week) = explode('-', $key);
+                $newKey = "Week $week, $year";
+            } else {
+                $date = Carbon::createFromFormat($dateFormat, $key);
+                $newKey = $date->format($displayFormat);
+            }
+
+            $formattedGroupedData->put($newKey, $items);
+        }
+
         // For export to PDF
         if ($request->has('export_pdf')) {
             $pdf = PDF::loadView('stock-movements.report-pdf', [
                 'title' => $title,
-                'fromDate' => $from->format('Y-m-d'),
-                'toDate' => $to->format('Y-m-d'),
+                'fromDate' => $from->format('d M Y'),
+                'toDate' => $to->format('d M Y'),
                 'reportType' => $reportType,
-                'groupedData' => $groupedData,
+                'groupedData' => $formattedGroupedData,
             ]);
 
-            return $pdf->download("stock-movement-report-{$reportType}-{$from->format('Y-m-d')}-to-{$to->format('Y-m-d')}.pdf");
+            return $pdf->download("stock-movement-report-{$reportType}-{$from->format('d-M-Y')}-to-{$to->format('d-M-Y')}.pdf");
         }
 
         return view('stock-movements.report', [
             'title' => $title,
-            'fromDate' => $from->format('Y-m-d'),
-            'toDate' => $to->format('Y-m-d'),
+            'fromDate' => $from->format('d M Y'),
+            'toDate' => $to->format('d M Y'),
             'reportType' => $reportType,
-            'groupedData' => $groupedData,
+            'groupedData' => $formattedGroupedData,
         ]);
     }
 }
