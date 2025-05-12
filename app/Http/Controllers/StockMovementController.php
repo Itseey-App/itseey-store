@@ -103,26 +103,31 @@ class StockMovementController extends Controller
                 $dateFormat = 'Y-m-d';
                 $displayFormat = 'd M Y';
                 $title = 'Laporan Pergerakan Stok Harian';
+
                 break;
             case 'weekly':
                 $dateFormat = 'Y-W';
                 $displayFormat = '\W\e\e\k W, Y';
                 $title = 'Laporan Pergerakan Stok Mingguan';
+
                 break;
             case 'monthly':
                 $dateFormat = 'Y-m';
                 $displayFormat = 'M Y';
                 $title = 'Laporan Pergerakan Stok Bulanan';
+
                 break;
             case 'yearly':
                 $dateFormat = 'Y';
                 $displayFormat = 'Y';
                 $title = 'Laporan Pergerakan Stok Tahunan';
+
                 break;
             default:
                 $dateFormat = 'Y-m-d';
                 $displayFormat = 'd M Y';
                 $title = 'Laporan Pergerakan Stok';
+
         }
 
         // Get data
