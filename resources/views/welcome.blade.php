@@ -63,6 +63,7 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="#features" class="text-gray-600 hover:text-pink-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Fitur</a>
+                    <a href="#gallery" class="text-gray-600 hover:text-pink-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Galeri</a>
                     <a href="{{ route('login') }}" class="bg-white text-pink-600 border border-pink-200 hover:bg-pink-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ml-2">Masuk</a>
                 </div>
             </div>
@@ -196,6 +197,37 @@
             </div>
         </div>
     </div>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-24 bg-gradient-to-r from-pink-50 to-pink-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold bg-gradient-to-r from-pink-500 to-pink-600 text-transparent bg-clip-text sm:text-4xl">
+                    Galeri Produk
+                </h2>
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                    Jelajahi koleksi visual dari produk skincare premium kami.
+                </p>
+            </div>
+
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Gallery Item Template -->
+                @foreach (['galeri1.jpg', 'galeri2.jpg', 'galeri3.jpg', 'galeri4.jpg'] as $i => $foto)
+                <div class="group relative rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-500">
+                    <div class="aspect-[3/4] bg-gray-100">
+                        <img src="{{ asset('storage/' . $foto) }}" alt="Produk {{ $i + 1 }}" 
+                            class="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                       
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white">
