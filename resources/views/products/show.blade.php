@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $product->name)
-@section('header', 'Product Details')
+@section('header', 'Produk Detail')
 
 @section('content')
 <div class="flex justify-between items-center mb-6">
@@ -10,7 +10,7 @@
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
-        Back to Products
+        Kembali Ke Produk
     </a>
 </div>
 
@@ -33,11 +33,11 @@
                     @endif
                     <div class="ml-6">
                         <h3 class="text-lg font-semibold text-gray-900">{{ $product->name }}</h3>
-                        <p class="text-sm text-gray-500">Category: {{ $product->category->name }}</p>
+                        <p class="text-sm text-gray-500">Kategori: {{ $product->category->name }}</p>
 
                         @php $daysUntilExpiry = $product->getDaysUntilExpiry(); @endphp
                         <p class="text-sm text-gray-500 mt-1">
-                            Expires on: <span class="font-medium text-gray-700">{{ \Carbon\Carbon::parse($product->expiry_date)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}</span>
+                            Kadaluarsa Dalam: <span class="font-medium text-gray-700">{{ \Carbon\Carbon::parse($product->expiry_date)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}</span>
                             @if ($daysUntilExpiry <= 30)
                                 <span class="inline-flex items-center ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium
                                     {{ $daysUntilExpiry <= 0 ? 'bg-red-100 text-red-800' : ($daysUntilExpiry <= 10 ? 'bg-orange-100 text-orange-800' : 'bg-yellow-100 text-yellow-800') }}">
@@ -45,7 +45,7 @@
                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        Expired
+                                        Kadaluarsa
                                     @else
                                         {{ $daysUntilExpiry }} {{ Str::plural('day', $daysUntilExpiry) }} left
                                     @endif
@@ -56,19 +56,19 @@
                 </div>
 
                 <div class="border-t border-gray-200 pt-4">
-                    <h4 class="text-md font-medium text-gray-700 mb-2">Description</h4>
-                    <p class="text-gray-600">{{ $product->description ?? 'No description provided.' }}</p>
+                    <h4 class="text-md font-medium text-gray-700 mb-2">Deskripsi</h4>
+                    <p class="text-gray-600">{{ $product->description ?? 'Tidak ada deskripsi yang diberikan.' }}</p>
                 </div>
 
                 <div class="border-t border-gray-200 pt-4 mt-4">
                     <div class="flex justify-between items-center">
-                        <h4 class="text-md font-medium text-gray-700">Current Stock</h4>
+                        <h4 class="text-md font-medium text-gray-700">Stok Sekarang</h4>
                         <span class="text-2xl font-bold {{ $product->stock < 10 ? 'text-red-600' : 'text-gray-700' }}">{{ $product->stock }}</span>
                     </div>
                 </div>
 
                 <div class="border-t border-gray-200 pt-4 mt-4">
-                    <h4 class="text-md font-medium text-gray-700 mb-4">Update Stock</h4>
+                    <h4 class="text-md font-medium text-gray-700 mb-4">Perbaharui Stok</h4>
 
                     <form action="{{ route('products.update-stock', $product) }}" method="POST" class="space-y-4">
                         @csrf
@@ -80,10 +80,10 @@
                                     name="quantity"
                                     id="quantity"
                                     value=""
-                                    label="Quantity (use negative for stock out)"
+                                    label="Kuantitas (gunakan angka negatif untuk stok habis)"
                                     required
                                 />
-                                <p class="mt-1 text-xs text-gray-500">Use positive numbers to add stock, negative to remove.</p>
+                                <p class="mt-1 text-xs text-gray-500">Gunakan angka positif untuk menambah stok, angka negatif untuk mengurangi.</p>
                             </div>
 
                             <div>
@@ -92,13 +92,13 @@
                                     name="notes"
                                     id="notes"
                                     value=""
-                                    label="Notes (Optional)"
+                                    label="Catatan (Opsional)"
                                 />
                             </div>
                         </div>
 
                         <div class="flex justify-end">
-                            <x-button type="submit" variant="primary">Update Stock</x-button>
+                            <x-button type="submit" variant="primary">Perbaharui Stok</x-button>
                         </div>
                     </form>
                 </div>
@@ -110,7 +110,7 @@
     <div>
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="bg-gray-50 px-4 py-3 border-b">
-                <h3 class="text-sm font-medium text-gray-700">Stock Movement History</h3>
+                <h3 class="text-sm font-medium text-gray-700">Riwayat Pergerakan Stok</h3>
             </div>
             <div class="max-h-96 overflow-y-auto">
                 <ul class="divide-y divide-gray-200">
@@ -119,7 +119,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $movement->type === 'in' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ $movement->type === 'in' ? '+' : '-' }}{{ $movement->quantity }}
+                                        {{ $movement->type === 'dalam' ? '+' : '-' }}{{ $movement->quantity }}
                                     </span>
                                     @if ($movement->notes)
                                         <p class="mt-1 text-xs text-gray-500">{{ $movement->notes }}</p>
@@ -131,7 +131,7 @@
                             </div>
                         </li>
                     @empty
-                        <li class="px-4 py-3 text-sm text-gray-500 text-center">No stock movements recorded</li>
+                        <li class="px-4 py-3 text-sm text-gray-500 text-center">Tidak ada pergerakan stok yang tercatat</li>
                     @endforelse
                 </ul>
             </div>
