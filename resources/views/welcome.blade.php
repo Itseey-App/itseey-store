@@ -234,21 +234,26 @@
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="col-span-1 md:col-span-2">
-                    <span class="text-2xl font-bold bg-gradient-to-r from-pink-400 to-pink-500 text-transparent bg-clip-text">Itseey</span>
+                    <img src="{{ asset('storage/itseeystore-logo.png') }}" alt="Itseey Store" class="h-8 w-auto">
                     <p class="mt-4 text-gray-400 max-w-md">
                         Sistem manajemen profesional. Pantau Stok, Notifikasi, dan Laporan yang intuitif.
                     </p>
-                    <div class="flex space-x-6 mt-6">
-                        <a href="#" class="text-gray-400 hover:text-pink-400 transition-colors duration-200">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-pink-400 transition-colors duration-200">
-                            <i class="fab fa-facebook text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-pink-400 transition-colors duration-200">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                    </div>
+                   <div class="flex space-x-4 text-pink-500 text-2xl mt-4">
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@itseey_store?is_from_webapp=1&sender_device=pc" target="_blank" aria-label="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/itseey.store?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+
+                    <!-- Shopee (gunakan ikon umum karena Font Awesome belum punya ikon Shopee resmi) -->
+                    <a href="https://shopee.co.id/itseey.store" target="_blank" aria-label="Shopee">
+                        <i class="fas fa-store"></i>
+                    </a>
+                </div>
                 </div>
 
             </div>
