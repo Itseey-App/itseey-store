@@ -40,18 +40,6 @@
             </svg>
             Tambah Katgeori
         </a>
-
-        <form id="bulk-delete-form" method="POST" action="{{ route('categories.bulk-destroy') }}" onsubmit="return confirm('Are you sure you want to delete selected categories?');" class="inline-block">
-            @csrf
-            @method('DELETE')
-            <input type="hidden" name="selected_categories" id="selected-categories-input">
-            <button type="submit" id="bulk-delete-button" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-all inline-flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                </svg>
-                Pilih Hapus
-            </button>
-        </form>
     </div>
 </div>
 
@@ -110,9 +98,9 @@
             @forelse ($categories as $category)
             <tr class="hover:bg-pink-50 transition-colors">
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <input type="checkbox" 
+                    <input type="checkbox"
                            class="category-checkbox rounded text-pink-600 focus:ring-pink-500 h-4 w-4"
-                           data-id="{{ $category->id }}" 
+                           data-id="{{ $category->id }}"
                            {{ $category->products_count > 0 ? 'disabled' : '' }}>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -186,14 +174,14 @@
         const categoryCheckboxes = document.querySelectorAll('.category-checkbox:not([disabled])');
         const selectedCategoriesInput = document.getElementById('selected-categories-input');
         const bulkDeleteButton = document.getElementById('bulk-delete-button');
-        
+
         // Function to update the hidden input and bulk delete button
         function updateBulkDelete() {
             const selectedIds = Array.from(document.querySelectorAll('.category-checkbox:checked:not([disabled])'))
                 .map(checkbox => checkbox.dataset.id);
-            
+
             selectedCategoriesInput.value = selectedIds.join(',');
-            
+
             if (selectedIds.length === 0) {
                 bulkDeleteButton.disabled = true;
                 bulkDeleteButton.classList.add('opacity-50', 'cursor-not-allowed');
@@ -202,10 +190,10 @@
                 bulkDeleteButton.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         }
-        
+
         // Initialize the button state
         updateBulkDelete();
-        
+
         // Select all checkbox event
         if (selectAllCheckbox) {
             selectAllCheckbox.addEventListener('change', function() {
@@ -215,7 +203,7 @@
                 updateBulkDelete();
             });
         }
-        
+
         // Individual checkboxes events
         categoryCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function() {
@@ -225,7 +213,7 @@
                 } else if (document.querySelectorAll('.category-checkbox:not(:checked):not([disabled])').length === 0) {
                     selectAllCheckbox.checked = true;
                 }
-                
+
                 updateBulkDelete();
             });
         });

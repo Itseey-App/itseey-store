@@ -39,7 +39,7 @@ Route::middleware('auth:admin')->group(function () {
 
     // Categories
     Route::resource('categories', CategoryController::class);
-    Route::delete('/categories/bulk-destroy', [CategoryController::class, 'bulkDestroy'])->name('categories.bulk-destroy');
+    Route::post('/categories/bulk-destroy', [CategoryController::class, 'bulkDestroy'])->name('categories.bulk-destroy');
 
     // Products
     Route::resource('products', ProductController::class);
