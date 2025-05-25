@@ -22,149 +22,9 @@
             </li>
         </ol>
     </nav>
-
-
 </div>
 
-<div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-    <div class="p-4 bg-pink-50 border-b border-pink-100">
-        <h3 class="text-md font-semibold text-pink-500 flex items-center">
-            Form Pencatatan Stok
-        </h3>
-    </div>
-
-    <form action="{{ route('stock-movements.store') }}" method="POST" class="p-6" id="stockMovementForm">
-        @csrf
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <label for="product_id" class="block text-sm font-medium text-gray-700 mb-1">Produk <span class="text-pink-500">*</span></label>
-                <div class="relative">
-                    <select name="product_id" id="product_id" class="block w-full rounded-lg border-gray-200 bg-gray-50 py-3 px-4 text-sm focus:border-pink-400 focus:ring-pink-300 focus:outline-none focus:ring focus:ring-opacity-40" required>
-                        <option value="">Pilih Produk</option>
-                        @foreach($products as $product)
-                        <option value="{{ $product->id }}" data-stock="{{ $product->stock }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
-                            {{ $product->name }} (Stok: {{ $product->stock }})
-                        </option>
-                        @endforeach
-                    </select>
-
-                </div>
-                <div id="stock-info" class="mt-2 text-sm font-medium hidden">
-                    <span class="px-2.5 py-0.5 bg-pink-50 text-pink-600 rounded-full inline-flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
-                        </svg>
-                        Stok tersedia: <span id="available-stock" class="font-semibold ml-1">0</span>
-                    </span>
-                </div>
-                @error('product_id')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Pencatatan <span class="text-pink-500">*</span></label>
-                <div class="grid grid-cols-2 gap-3 mt-1">
-                    <label class="flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all hover:bg-pink-50 peer-checked:border-pink-500 peer-checked:bg-pink-50" for="type-in">
-                        <input type="radio" name="type" id="type-in" value="in" class="peer sr-only" {{ old('type') == 'in' ? 'checked' : '' }}>
-                        <span class="flex items-center">
-                            <span class="w-8 h-8 mr-2 rounded-full bg-accent flex items-center justify-center text-white">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-                                </svg>
-                            </span>
-                            <span class="font-medium text-sm">Stok Masuk</span>
-                        </span>
-                    </label>
-
-                    <label class="flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all hover:bg-pink-50 peer-checked:border-pink-500 peer-checked:bg-pink-50" for="type-out">
-                        <input type="radio" name="type" id="type-out" value="out" class="peer sr-only" {{ old('type') == 'out' ? 'checked' : '' }}>
-                        <span class="flex items-center">
-                            <span class="w-8 h-8 mr-2 rounded-full bg-red-500 flex items-center justify-center text-white">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                                </svg>
-                            </span>
-                            <span class="font-medium text-sm">Stok Keluar</span>
-                        </span>
-                    </label>
-                </div>
-                @error('type')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
-                <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Jumlah <span class="text-pink-500">*</span></label>
-                <div class="flex rounded-lg bg-gray-50 border-gray-200 overflow-hidden">
-                    <button type="button" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 border-r border-gray-200 focus:outline-none" id="decrease-qty">
-                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                        </svg>
-                    </button>
-                    <input
-                        type="number"
-                        name="quantity"
-                        id="quantity"
-                        value="{{ old('quantity') }}"
-                        min="1"
-                        class="flex-1 block w-full py-3 px-4 border-0 bg-gray-50 text-center focus:ring-0 text-sm"
-                        required />
-                    <button type="button" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 border-l border-gray-200 focus:outline-none" id="increase-qty">
-                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div id="quantity-warning" class="mt-2 hidden items-center text-sm text-red-600">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                    <span>Jumlah melebihi stok yang tersedia!</span>
-                </div>
-                @error('quantity')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
-                <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Catatan (Opsional)</label>
-                <div class="mt-1 relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                    </div>
-                    <input
-                        type="text"
-                        name="notes"
-                        id="notes"
-                        value="{{ old('notes') }}"
-                        placeholder="Masukkan catatan terkait pergerakan stok ini"
-                        class="block w-full pl-10 rounded-lg border-gray-200 bg-gray-50 py-3 focus:border-pink-400 focus:ring-pink-300 focus:outline-none focus:ring focus:ring-opacity-40" />
-                </div>
-                @error('notes')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-        </div>
-
-        <div class="flex justify-end mt-8">
-            <button type="reset" id="reset-btn" class="bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-4 rounded-lg transition-all mr-2 border border-gray-300">
-                Reset
-            </button>
-            <button type="submit" id="submit-btn" class="bg-green-300 text-white font-medium py-2.5 px-6 rounded-lg transition-all flex items-center shadow-sm opacity-60 cursor-not-allowed" disabled>
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                Simpan
-            </button>
-        </div>
-    </form>
-</div>
-
-<div class="mt-6 bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+<div class="mt-6 mb-6 bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
     <div class="p-4 bg-pink-50 border-b border-pink-100">
         <h3 class="text-sm font-semibold text-pink-500 flex items-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -177,8 +37,8 @@
         <div class="flex flex-col sm:flex-row gap-4">
             <div class="flex-1 p-4 rounded-lg">
                 <div class="flex items-center mb-3">
-                    <div class="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-white mr-3">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white mr-3">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
                         </svg>
                     </div>
@@ -191,7 +51,7 @@
             <div class="flex-1 p-4 rounded-lg">
                 <div class="flex items-center mb-3">
                     <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white mr-3">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                         </svg>
                     </div>
@@ -205,162 +65,243 @@
     </div>
 </div>
 
+<!-- Grid Container: Kiri = Stok Masuk, Kanan = Stok Keluar -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[600px]">
+
+    <!-- FORM STOK MASUK (KIRI) -->
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 flex flex-col h-full">
+        <div class="p-4 bg-green-50 border-b border-green-100">
+            <h3 class="text-md font-semibold text-green-600 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                </svg>
+                Stok Masuk
+            </h3>
+        </div>
+
+        <form action="{{ route('stock-movements.store') }}" method="POST" class="p-6 flex flex-col flex-1" id="stockInForm">
+            @csrf
+            <input type="hidden" name="type" value="in">
+
+            <div class="space-y-4 flex-1">
+                <div>
+                    <label for="product_in" class="block text-sm font-medium text-gray-700 mb-2">Produk</label>
+                    <select name="product_id" id="product_in" class="block w-full rounded-lg border-gray-200 bg-gray-50 py-3 px-4 text-sm focus:border-green-400 focus:ring-green-300 focus:outline-none focus:ring focus:ring-opacity-40" required>
+                        <option value="">Pilih Produk</option>
+                        @foreach($products as $product)
+                        <option value="{{ $product->id }}" data-stock="{{ $product->stock }}">
+                            {{ $product->name }} (Stok: {{ $product->stock }})
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label for="quantity_in" class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
+                    <div class="flex rounded-lg bg-gray-50 border border-gray-200 overflow-hidden">
+                        <button type="button" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 border-r border-gray-200 focus:outline-none transition-colors" id="decrease-qty-in">
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                            </svg>
+                        </button>
+                        <input
+                            type="number"
+                            name="quantity"
+                            id="quantity_in"
+                            value="1"
+                            min="1"
+                            class="flex-1 block w-full py-3 px-4 border-0 bg-gray-50 text-center focus:ring-0 text-sm"
+                            required />
+                        <button type="button" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 border-l border-gray-200 focus:outline-none transition-colors" id="increase-qty-in">
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button type="reset" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-all border border-gray-200 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Reset
+                </button>
+                <button type="submit" class="flex-1 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-all flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                    </svg>
+                    Stok Masuk
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- FORM STOK KELUAR (KANAN) -->
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 flex flex-col h-full">
+        <div class="p-4 bg-red-50 border-b border-red-100">
+            <h3 class="text-md font-semibold text-red-600 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+                Stok Keluar
+            </h3>
+        </div>
+
+        <form action="{{ route('stock-movements.store') }}" method="POST" class="p-6 flex flex-col flex-1" id="stockOutForm">
+            @csrf
+            <input type="hidden" name="type" value="out">
+
+            <div class="space-y-4 flex-1">
+                <div>
+                    <label for="product_out" class="block text-sm font-medium text-gray-700 mb-2">Produk</label>
+                    <select name="product_id" id="product_out" class="block w-full rounded-lg border-gray-200 bg-gray-50 py-3 px-4 text-sm focus:border-red-400 focus:ring-red-300 focus:outline-none focus:ring focus:ring-opacity-40" required>
+                        <option value="">Pilih Produk</option>
+                        @foreach($products as $product)
+                        <option value="{{ $product->id }}" data-stock="{{ $product->stock }}">
+                            {{ $product->name }} (Stok: {{ $product->stock }})
+                        </option>
+                        @endforeach
+                    </select>
+                    <div id="stock-info-out" class="mt-2 text-sm font-medium hidden">
+                        <span class="px-3 py-1 bg-red-50 text-red-600 rounded-full inline-flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
+                            </svg>
+                            Stok tersedia: <span id="available-stock-out" class="font-semibold ml-1">0</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="quantity_out" class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
+                    <div class="flex rounded-lg bg-gray-50 border border-gray-200 overflow-hidden">
+                        <button type="button" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 border-r border-gray-200 focus:outline-none transition-colors" id="decrease-qty-out">
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                            </svg>
+                        </button>
+                        <input
+                            type="number"
+                            name="quantity"
+                            id="quantity_out"
+                            value="1"
+                            min="1"
+                            class="flex-1 block w-full py-3 px-4 border-0 bg-gray-50 text-center focus:ring-0 text-sm"
+                            required />
+                        <button type="button" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 border-l border-gray-200 focus:outline-none transition-colors" id="increase-qty-out">
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="quantity-warning-out" class="mt-2 hidden items-center text-sm text-red-600">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        <span>Jumlah melebihi stok yang tersedia!</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button type="reset" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-all border border-gray-200 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Reset
+                </button>
+                <button type="submit" id="submit-btn-out" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-all flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                    Stok Keluar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const productSelect = document.getElementById('product_id');
-        const quantityInput = document.getElementById('quantity');
-        const stockInfo = document.getElementById('stock-info');
-        const availableStock = document.getElementById('available-stock');
-        const quantityWarning = document.getElementById('quantity-warning');
-        const submitBtn = document.getElementById('submit-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const increaseBtn = document.getElementById('increase-qty');
-        const decreaseBtn = document.getElementById('decrease-qty');
-        const typeIn = document.getElementById('type-in');
-        const typeOut = document.getElementById('type-out');
-        const form = document.getElementById('stockMovementForm');
+        // Form Stok Masuk
+        const productInSelect = document.getElementById('product_in');
+        const quantityInInput = document.getElementById('quantity_in');
+        const increaseInBtn = document.getElementById('increase-qty-in');
+        const decreaseInBtn = document.getElementById('decrease-qty-in');
 
-        let formChanged = false;
+        // Form Stok Keluar
+        const productOutSelect = document.getElementById('product_out');
+        const quantityOutInput = document.getElementById('quantity_out');
+        const stockInfoOut = document.getElementById('stock-info-out');
+        const availableStockOut = document.getElementById('available-stock-out');
+        const quantityWarningOut = document.getElementById('quantity-warning-out');
+        const submitBtnOut = document.getElementById('submit-btn-out');
+        const increaseOutBtn = document.getElementById('increase-qty-out');
+        const decreaseOutBtn = document.getElementById('decrease-qty-out');
 
-        if (!typeIn.checked && !typeOut.checked) {
-            typeIn.checked = true;
-        }
+        // Stock In Functions
+        increaseInBtn.addEventListener('click', function() {
+            quantityInInput.value = (parseInt(quantityInInput.value) || 0) + 1;
+        });
 
-        if (!quantityInput.value) {
-            quantityInput.value = 1;
-        }
-
-        function updateRadioStyles() {
-            const labels = document.querySelectorAll('label[for^="type-"]');
-            labels.forEach(label => {
-                const radio = document.getElementById(label.getAttribute('for'));
-                if (radio.checked) {
-                    label.classList.add('border-pink-500', 'bg-pink-50');
-                } else {
-                    label.classList.remove('border-pink-500', 'bg-pink-50');
-                }
-            });
-        }
-
-        updateRadioStyles();
-
-        function updateSubmitButton() {
-            const productSelected = productSelect.value !== '';
-            const quantityValid = parseInt(quantityInput.value) > 0;
-            const isOutType = typeOut.checked;
-            const selectedOption = productSelect.options[productSelect.selectedIndex];
-            let stockValid = true;
-
-            if (selectedOption && selectedOption.value && isOutType) {
-                const currentStock = parseInt(selectedOption.dataset.stock);
-                const quantity = parseInt(quantityInput.value) || 0;
-                stockValid = quantity <= currentStock;
+        decreaseInBtn.addEventListener('click', function() {
+            const currentVal = parseInt(quantityInInput.value) || 0;
+            if (currentVal > 1) {
+                quantityInInput.value = currentVal - 1;
             }
+        });
 
-            const formValid = productSelected && quantityValid && stockValid && formChanged;
-
-            if (formValid) {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-60', 'cursor-not-allowed', 'bg-green-300');
-                submitBtn.classList.add('bg-green-500', 'hover:bg-green-600');
-            } else {
-                submitBtn.disabled = true;
-                submitBtn.classList.add('opacity-60', 'cursor-not-allowed', 'bg-green-300');
-                submitBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
-            }
-        }
-
-        productSelect.addEventListener('change', function() {
-            formChanged = true;
+        // Stock Out Functions
+        productOutSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             if (selectedOption.value) {
                 const currentStock = selectedOption.dataset.stock;
-                availableStock.textContent = currentStock;
-                stockInfo.classList.remove('hidden');
-                validateQuantity();
+                availableStockOut.textContent = currentStock;
+                stockInfoOut.classList.remove('hidden');
+                validateQuantityOut();
             } else {
-                stockInfo.classList.add('hidden');
+                stockInfoOut.classList.add('hidden');
             }
-            updateSubmitButton();
         });
 
-        if (productSelect.value) {
-            productSelect.dispatchEvent(new Event('change'));
-        }
-
-        function validateQuantity() {
-            const selectedOption = productSelect.options[productSelect.selectedIndex];
+        function validateQuantityOut() {
+            const selectedOption = productOutSelect.options[productOutSelect.selectedIndex];
             if (!selectedOption.value) return;
 
             const currentStock = parseInt(selectedOption.dataset.stock);
-            const quantity = parseInt(quantityInput.value) || 0;
-            const isOutType = typeOut.checked;
+            const quantity = parseInt(quantityOutInput.value) || 0;
 
-            if (isOutType && quantity > currentStock) {
-                quantityWarning.classList.remove('hidden');
-                quantityWarning.classList.add('flex');
-                quantityInput.classList.add('border-red-300', 'bg-red-50');
+            if (quantity > currentStock) {
+                quantityWarningOut.classList.remove('hidden');
+                quantityWarningOut.classList.add('flex');
+                quantityOutInput.classList.add('border-red-300', 'bg-red-50');
+                submitBtnOut.disabled = true;
+                submitBtnOut.classList.add('opacity-60', 'cursor-not-allowed');
             } else {
-                quantityWarning.classList.add('hidden');
-                quantityWarning.classList.remove('flex');
-                quantityInput.classList.remove('border-red-300', 'bg-red-50');
+                quantityWarningOut.classList.add('hidden');
+                quantityWarningOut.classList.remove('flex');
+                quantityOutInput.classList.remove('border-red-300', 'bg-red-50');
+                submitBtnOut.disabled = false;
+                submitBtnOut.classList.remove('opacity-60', 'cursor-not-allowed');
             }
-
-            updateSubmitButton();
         }
 
-        quantityInput.addEventListener('input', function() {
-            formChanged = true;
-            validateQuantity();
+        quantityOutInput.addEventListener('input', validateQuantityOut);
+
+        increaseOutBtn.addEventListener('click', function() {
+            quantityOutInput.value = (parseInt(quantityOutInput.value) || 0) + 1;
+            validateQuantityOut();
         });
 
-        typeIn.addEventListener('change', function() {
-            formChanged = true;
-            updateRadioStyles();
-            validateQuantity();
-        });
-
-        typeOut.addEventListener('change', function() {
-            formChanged = true;
-            updateRadioStyles();
-            validateQuantity();
-        });
-
-        document.getElementById('notes').addEventListener('input', function() {
-            formChanged = true;
-            updateSubmitButton();
-        });
-
-        increaseBtn.addEventListener('click', function() {
-            formChanged = true;
-            quantityInput.value = (parseInt(quantityInput.value) || 0) + 1;
-            quantityInput.dispatchEvent(new Event('input'));
-        });
-
-        decreaseBtn.addEventListener('click', function() {
-            formChanged = true;
-            const currentVal = parseInt(quantityInput.value) || 0;
+        decreaseOutBtn.addEventListener('click', function() {
+            const currentVal = parseInt(quantityOutInput.value) || 0;
             if (currentVal > 1) {
-                quantityInput.value = currentVal - 1;
-                quantityInput.dispatchEvent(new Event('input'));
+                quantityOutInput.value = currentVal - 1;
+                validateQuantityOut();
             }
-        });
-
-        resetBtn.addEventListener('click', function() {
-            setTimeout(() => {
-                formChanged = false;
-                updateSubmitButton();
-
-                quantityWarning.classList.add('hidden');
-                quantityWarning.classList.remove('flex');
-                quantityInput.classList.remove('border-red-300', 'bg-red-50');
-                stockInfo.classList.add('hidden');
-
-                typeIn.checked = true;
-                updateRadioStyles();
-
-                quantityInput.value = 1;
-            }, 10);
         });
     });
 </script>
