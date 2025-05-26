@@ -93,7 +93,7 @@
                 <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Kategori</th>
                 <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Tipe</th>
                 <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Jumlah</th>
-                <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Catatan</th>
+                <!-- <th scope="col" class="px-6 py-5 text-left text-xs font-semibold text-pink-500  uppercase tracking-wider">Catatan</th> -->
             </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -136,9 +136,9 @@
                         @endif
                     </div>
                 </td>
-                <td class="px-6 py-4">
+                <!-- <td class="px-6 py-4">
                     <div class="text-sm text-gray-500">{{ $movement->notes ?? '-' }}</div>
-                </td>
+                </td> -->
             </tr>
             @empty
             <tr>
@@ -251,10 +251,10 @@
                 <p id="modalProductDescription">Memuat...</p>
             </div>
 
-            <div class="mb-4">
+            <!-- <div class="mb-4">
                 <p class="text-sm text-gray-500 mb-1">Catatan</p>
                 <p id="modalProductNotes">Memuat...</p>
-            </div>
+            </div> -->
 
             <div class="mb-4">
                 <p class="text-sm text-gray-500 mb-1">Stok Saat Ini</p>
