@@ -63,6 +63,9 @@
                                 </svg>
                                 Dashboard
                             </a>
+                            
+                            {{-- Admin only navigation items --}}
+                            @if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->role === 'admin')
                             <a href="{{ route('categories.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('categories.*') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
@@ -75,18 +78,31 @@
                                 </svg>
                                 Produk
                             </a>
+                            <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('users.*') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                </svg>
+                                Kelola Akun
+                            </a>
+                            @endif
+                            
+                            {{-- Available for both admin and pegawai --}}
                             <a href="{{ route('stock-movements.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('stock-movements.*') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                                 </svg>
                                 Perpindahan Stok
                             </a>
+                            
+                            {{-- Admin only - Reports --}}
+                            @if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->role === 'admin')
                             <a href="{{ route('reports.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('reports.*') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                                 Laporan
                             </a>
+                            @endif
                         </nav>
                     </div>
                     <div class="flex-shrink-0 p-4 border-t border-gray-200">
@@ -123,6 +139,9 @@
                                     </svg>
                                     Dashboard
                                 </a>
+                                
+                                {{-- Admin only navigation items --}}
+                                @if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->role === 'admin')
                                 <a href="{{ route('categories.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('categories.*') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
@@ -135,18 +154,31 @@
                                     </svg>
                                     Produk
                                 </a>
+                                <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('users.*') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                    </svg>
+                                    Kelola Akun
+                                </a>
+                                @endif
+                                
+                                {{-- Available for both admin and pegawai --}}
                                 <a href="{{ route('stock-movements.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('stock-movements.*') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                                     </svg>
                                     Perpindahan Stok
                                 </a>
+                                
+                                {{-- Admin only - Reports --}}
+                                @if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->role === 'admin')
                                 <a href="{{ route('reports.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('reports.*') ? 'bg-primary bg-opacity-10 text-primary-darker font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary' }}">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                     </svg>
                                     Laporan
                                 </a>
+                                @endif
                             </nav>
                         </div>
                         <div class="flex items-center justify-between flex-shrink-0 p-4 border-t border-gray-200">

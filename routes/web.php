@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StockMovementController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,23 +34,23 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 
 // Admin routes (protected by admin guard)
 Route::middleware('auth:admin')->group(function () {
-    // Dashboard
+    // Dashboard - accessible by both admin and pegawai
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/notifications/{id}/mark-as-read', [DashboardController::class, 'markNotificationAsRead'])->name('notifications.mark-read');
 
-    // Categories
-    Route::resource('categories', CategoryController::class);
-    Route::post('/categories/bulk-destroy', [CategoryController::class, 'bulkDestroy'])->name('categories.bulk-destroy');
-
-    // Products
-    Route::resource('products', ProductController::class);
-    Route::post('/products/{product}/update-stock', [ProductController::class, 'updateStock'])->name('products.update-stock');
-
-    // Stock Movements
+    // Stock Movements - accessible by both admin and pegawai
     Route::get('/stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
     Route::get('/stock-movements/create', [StockMovementController::class, 'create'])->name('stock-movements.create');
     Route::post('/stock-movements', [StockMovementController::class, 'store'])->name('stock-movements.store');
 
-    // Reports
+    // Admin only routes - check role in controller
+    Route::resource('categories', CategoryController::class);
+    Route::post('/categories/bulk-destroy', [CategoryController::class, 'bulkDestroy'])->name('categories.bulk-destroy');
+
+    Route::resource('products', ProductController::class);
+    Route::post('/products/{product}/update-stock', [ProductController::class, 'updateStock'])->name('products.update-stock');
+
+    Route::resource('users', UserController::class);
+
     Route::get('/reports', [StockMovementController::class, 'report'])->name('reports.index');
 });
