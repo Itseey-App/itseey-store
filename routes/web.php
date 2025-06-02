@@ -38,7 +38,6 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/notifications/{id}/mark-as-read', [DashboardController::class, 'markNotificationAsRead'])->name('notifications.mark-read');
 
-    // Stock Movements - accessible by both admin and pegawai
     Route::get('/stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
     Route::get('/stock-movements/create', [StockMovementController::class, 'create'])->name('stock-movements.create');
     Route::post('/stock-movements', [StockMovementController::class, 'store'])->name('stock-movements.store');

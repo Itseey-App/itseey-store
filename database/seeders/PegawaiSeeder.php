@@ -14,7 +14,6 @@ class PegawaiSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create pegawai users
         $pegawaiUsers = [
             [
                 'name' => 'Ahmad Pegawai',
