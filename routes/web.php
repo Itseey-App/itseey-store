@@ -52,4 +52,13 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('users', UserController::class);
 
     Route::get('/reports', [StockMovementController::class, 'report'])->name('reports.index');
+
+    // Add expiry alert route
+    Route::get('/expiry-alert', [DashboardController::class, 'expiryAlert'])->name('expiry.alert');
+
+    // Add route for individual product expiry notification
+    Route::get('/expiry-notification/{product}', [DashboardController::class, 'showExpiryNotification'])->name('expiry.notification');
+
+    // Add test route for Formspree
+    Route::get('/test-formspree', [DashboardController::class, 'testFormspree'])->name('test.formspree');
 });
