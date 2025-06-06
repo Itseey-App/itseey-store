@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -35,4 +34,7 @@ return [
         ],
     ],
 
+    'formspree' => [
+        'endpoint' => env('FORMSPREE_ENDPOINT', 'https://formspree.io/f/YOUR_FORM_ID'),
+    ],
 ];
