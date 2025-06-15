@@ -59,13 +59,19 @@ class StockMovementController extends Controller
             'type' => 'required|in:in,out',
             'quantity' => 'required|integer|min:1',
             'notes' => 'nullable|string',
+            'confirmed' => 'required|boolean', // Tambahan untuk konfirmasi
         ]);
+
+        // Cek apakah konfirmasi sudah diberikan
+        if (!$validated['confirmed']) {
+            return back()->withInput()->with('error', 'Konfirmasi diperlukan untuk menyimpan pergerakan stok.');
+        }
 
         $product = Product::findOrFail($validated['product_id']);
 
         // Check if we have enough stock for outgoing movements
         if ($validated['type'] === 'out' && $product->stock < $validated['quantity']) {
-            return back()->withInput()->with('error', 'Not enough stock available.');
+            return back()->withInput()->with('error', 'Stok tidak mencukupi.');
         }
 
         // Update product stock
@@ -77,10 +83,16 @@ class StockMovementController extends Controller
         $product->save();
 
         // Create stock movement record
-        StockMovement::create($validated);
+        StockMovement::create([
+            'product_id' => $validated['product_id'],
+            'type' => $validated['type'],
+            'quantity' => $validated['quantity'],
+            'notes' => $validated['notes'],
+        ]);
 
+        $typeText = $validated['type'] === 'in' ? 'masuk' : 'keluar';
         return redirect()->route('stock-movements.index')
-            ->with('success', 'Stock movement recorded successfully.');
+            ->with('success', "Pergerakan stok {$typeText} berhasil dicatat.");
     }
 
     public function report(Request $request)
