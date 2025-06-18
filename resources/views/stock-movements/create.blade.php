@@ -141,6 +141,9 @@
                 Form Stok Keluar
             </button>
         </div>
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-600">Pilih salah satu jenis pencatatan stok di atas untuk melanjutkan</p>
+        </div>
     </div>
 </div>
 
@@ -338,148 +341,235 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const btnStockIn = document.getElementById('btn-stock-in');
-    const btnStockOut = document.getElementById('btn-stock-out');
-    const formStockIn = document.getElementById('form-stock-in');
-    const formStockOut = document.getElementById('form-stock-out');
-    
-    // Modal elements
-    const modal = document.getElementById('confirmationModal');
-    const confirmationMessage = document.getElementById('confirmationMessage');
-    const confirmBtn = document.getElementById('confirmBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    
-    let currentForm = null;
-    let currentFormType = null;
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnStockIn = document.getElementById('btn-stock-in');
+        const btnStockOut = document.getElementById('btn-stock-out');
+        const formStockIn = document.getElementById('form-stock-in');
+        const formStockOut = document.getElementById('form-stock-out');
 
-    // Toggle form visibility
-    btnStockIn.addEventListener('click', function() {
-        formStockIn.classList.remove('hidden');
-        formStockOut.classList.add('hidden');
-        btnStockIn.classList.add('ring-2', 'ring-green-300');
-        btnStockOut.classList.remove('ring-2', 'ring-red-300');
-    });
+        // Modal elements
+        const modal = document.getElementById('confirmationModal');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
 
-    btnStockOut.addEventListener('click', function() {
-        formStockOut.classList.remove('hidden');
-        formStockIn.classList.add('hidden');
-        btnStockOut.classList.add('ring-2', 'ring-red-300');
-        btnStockIn.classList.remove('ring-2', 'ring-green-300');
-    });
+        let currentForm = null;
+        let currentFormType = null;
 
-    // Quantity controls for stock in
-    const decreaseQtyIn = document.getElementById('decrease-qty-in');
-    const increaseQtyIn = document.getElementById('increase-qty-in');
-    const quantityIn = document.getElementById('quantity_in');
+        // Function to set button states following proper UI/UX principles
+        function setButtonStates(state) {
+            // Reset all classes first
+            btnStockIn.className = 'flex-1 font-medium py-4 px-6 rounded-lg transition-all flex items-center justify-center text-lg shadow-md';
+            btnStockOut.className = 'flex-1 font-medium py-4 px-6 rounded-lg transition-all flex items-center justify-center text-lg shadow-md';
 
-    decreaseQtyIn.addEventListener('click', function() {
-        let value = parseInt(quantityIn.value);
-        if (value > 1) {
-            quantityIn.value = value - 1;
-        }
-    });
+            // Both buttons remain functionally enabled
+            btnStockIn.disabled = false;
+            btnStockOut.disabled = false;
 
-    increaseQtyIn.addEventListener('click', function() {
-        let value = parseInt(quantityIn.value);
-        quantityIn.value = value + 1;
-    });
-
-    // Quantity controls for stock out
-    const decreaseQtyOut = document.getElementById('decrease-qty-out');
-    const increaseQtyOut = document.getElementById('increase-qty-out');
-    const quantityOut = document.getElementById('quantity_out');
-    const productOut = document.getElementById('product_out');
-    const stockInfoOut = document.getElementById('stock-info-out');
-    const availableStockOut = document.getElementById('available-stock-out');
-    const quantityWarningOut = document.getElementById('quantity-warning-out');
-    const submitBtnOut = document.getElementById('submit-btn-out');
-
-    decreaseQtyOut.addEventListener('click', function() {
-        let value = parseInt(quantityOut.value);
-        if (value > 1) {
-            quantityOut.value = value - 1;
-            checkStockAvailability();
-        }
-    });
-
-    increaseQtyOut.addEventListener('click', function() {
-        let value = parseInt(quantityOut.value);
-        quantityOut.value = value + 1;
-        checkStockAvailability();
-    });
-
-    // Product selection for stock out
-    productOut.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        if (selectedOption.value) {
-            const stock = selectedOption.getAttribute('data-stock');
-            availableStockOut.textContent = stock;
-            stockInfoOut.classList.remove('hidden');
-            checkStockAvailability();
-        } else {
-            stockInfoOut.classList.add('hidden');
-            quantityWarningOut.classList.add('hidden');
-            submitBtnOut.disabled = false;
-            submitBtnOut.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-    });
-
-    // Check stock availability for outgoing stock
-    quantityOut.addEventListener('input', checkStockAvailability);
-
-    function checkStockAvailability() {
-        const selectedOption = productOut.options[productOut.selectedIndex];
-        if (selectedOption.value) {
-            const availableStock = parseInt(selectedOption.getAttribute('data-stock'));
-            const requestedQuantity = parseInt(quantityOut.value);
-
-            if (requestedQuantity > availableStock) {
-                quantityWarningOut.classList.remove('hidden');
-                quantityWarningOut.classList.add('flex');
-                submitBtnOut.disabled = true;
-                submitBtnOut.classList.add('opacity-50', 'cursor-not-allowed');
-            } else {
-                quantityWarningOut.classList.add('hidden');
-                quantityWarningOut.classList.remove('flex');
-                submitBtnOut.disabled = false;
-                submitBtnOut.classList.remove('opacity-50', 'cursor-not-allowed');
+            switch (state) {
+                case 'initial':
+                    // Both buttons disabled state (visually)
+                    btnStockIn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-pointer');
+                    btnStockOut.classList.add('bg-gray-300', 'text-gray-500', 'cursor-pointer');
+                    break;
+                case 'stock-in-active':
+                    // Stock In active, Stock Out disabled
+                    btnStockIn.classList.add('bg-green-500', 'hover:bg-green-600', 'text-white');
+                    btnStockOut.classList.add('bg-gray-300', 'text-gray-500', 'cursor-pointer');
+                    break;
+                case 'stock-out-active':
+                    // Stock Out active, Stock In disabled
+                    btnStockIn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-pointer');
+                    btnStockOut.classList.add('bg-red-500', 'hover:bg-red-600', 'text-white');
+                    break;
             }
         }
-    }
 
-    // Form submission with confirmation
-    const stockInForm = document.getElementById('stockInForm');
-    const stockOutForm = document.getElementById('stockOutForm');
+        // Initialize buttons in disabled state
+        function initializeButtons() {
+            setButtonStates('initial');
+            // Hide both forms initially
+            formStockIn.classList.add('hidden');
+            formStockOut.classList.add('hidden');
+        }
 
-    stockInForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        currentForm = this;
-        currentFormType = 'in';
-        showConfirmationModal();
-    });
+        // Stock In button click handler
+        btnStockIn.addEventListener('click', function() {
+            formStockIn.classList.remove('hidden');
+            formStockOut.classList.add('hidden');
+            setButtonStates('stock-in-active');
+        });
 
-    stockOutForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        currentForm = this;
-        currentFormType = 'out';
-        showConfirmationModal();
-    });
+        // Stock Out button click handler
+        btnStockOut.addEventListener('click', function() {
+            formStockOut.classList.remove('hidden');
+            formStockIn.classList.add('hidden');
+            setButtonStates('stock-out-active');
+        });
 
-    function showConfirmationModal() {
-        const productSelect = currentFormType === 'in' ? 
-            document.getElementById('product_in') : 
-            document.getElementById('product_out');
-        const quantityInput = currentFormType === 'in' ? 
-            document.getElementById('quantity_in') : 
-            document.getElementById('quantity_out');
+        // Initialize buttons on page load
+        initializeButtons();
 
-        const selectedProduct = productSelect.options[productSelect.selectedIndex];
-        const productName = selectedProduct.text.split(' (')[0];
-        const quantity = quantityInput.value;
-        const type = currentFormType === 'in' ? 'masuk' : 'keluar';
+        // Check if there's old input to determine which form to show
+        const oldProductIn = document.querySelector('#product_in').value;
+        const oldProductOut = document.querySelector('#product_out').value;
 
-        confirmationMessage.innerHTML = `
+        // Show appropriate form based on old input
+        if (oldProductIn || document.querySelector('input[name="type"][value="in"]')) {
+            btnStockIn.click();
+        } else if (oldProductOut || document.querySelector('input[name="type"][value="out"]')) {
+            btnStockOut.click();
+        }
+
+        // Rest of your existing JavaScript code for quantity controls, stock checking, etc.
+        // Quantity controls for stock in
+        const decreaseQtyIn = document.getElementById('decrease-qty-in');
+        const increaseQtyIn = document.getElementById('increase-qty-in');
+        const quantityIn = document.getElementById('quantity_in');
+
+        if (decreaseQtyIn && increaseQtyIn && quantityIn) {
+            decreaseQtyIn.addEventListener('click', function() {
+                let value = parseInt(quantityIn.value) || 1;
+                if (value > 1) {
+                    quantityIn.value = value - 1;
+                }
+            });
+
+            increaseQtyIn.addEventListener('click', function() {
+                let value = parseInt(quantityIn.value) || 1;
+                quantityIn.value = value + 1;
+            });
+        }
+
+        // Quantity controls for stock out
+        const decreaseQtyOut = document.getElementById('decrease-qty-out');
+        const increaseQtyOut = document.getElementById('increase-qty-out');
+        const quantityOut = document.getElementById('quantity_out');
+        const productOut = document.getElementById('product_out');
+        const stockInfoOut = document.getElementById('stock-info-out');
+        const availableStockOut = document.getElementById('available-stock-out');
+        const quantityWarningOut = document.getElementById('quantity-warning-out');
+        const submitBtnOut = document.getElementById('submit-btn-out');
+
+        if (decreaseQtyOut && increaseQtyOut && quantityOut) {
+            decreaseQtyOut.addEventListener('click', function() {
+                let value = parseInt(quantityOut.value) || 1;
+                if (value > 1) {
+                    quantityOut.value = value - 1;
+                    checkStockAvailability();
+                }
+            });
+
+            increaseQtyOut.addEventListener('click', function() {
+                let value = parseInt(quantityOut.value) || 1;
+                quantityOut.value = value + 1;
+                checkStockAvailability();
+            });
+        }
+
+        // Product selection for stock out
+        if (productOut) {
+            productOut.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.value) {
+                    const stock = selectedOption.getAttribute('data-stock');
+                    if (availableStockOut) {
+                        availableStockOut.textContent = stock;
+                    }
+                    if (stockInfoOut) {
+                        stockInfoOut.classList.remove('hidden');
+                    }
+                    checkStockAvailability();
+                } else {
+                    if (stockInfoOut) {
+                        stockInfoOut.classList.add('hidden');
+                    }
+                    if (quantityWarningOut) {
+                        quantityWarningOut.classList.add('hidden');
+                    }
+                    if (submitBtnOut) {
+                        submitBtnOut.disabled = false;
+                        submitBtnOut.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                }
+            });
+        }
+
+        // Check stock availability for outgoing stock
+        if (quantityOut) {
+            quantityOut.addEventListener('input', checkStockAvailability);
+        }
+
+        function checkStockAvailability() {
+            if (!productOut || !quantityOut) return;
+
+            const selectedOption = productOut.options[productOut.selectedIndex];
+            if (selectedOption.value) {
+                const availableStock = parseInt(selectedOption.getAttribute('data-stock')) || 0;
+                const requestedQuantity = parseInt(quantityOut.value) || 0;
+
+                if (requestedQuantity > availableStock) {
+                    if (quantityWarningOut) {
+                        quantityWarningOut.classList.remove('hidden');
+                        quantityWarningOut.classList.add('flex');
+                    }
+                    if (submitBtnOut) {
+                        submitBtnOut.disabled = true;
+                        submitBtnOut.classList.add('opacity-50', 'cursor-not-allowed');
+                    }
+                } else {
+                    if (quantityWarningOut) {
+                        quantityWarningOut.classList.add('hidden');
+                        quantityWarningOut.classList.remove('flex');
+                    }
+                    if (submitBtnOut) {
+                        submitBtnOut.disabled = false;
+                        submitBtnOut.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                }
+            }
+        }
+
+        // Form submission with confirmation
+        const stockInForm = document.getElementById('stockInForm');
+        const stockOutForm = document.getElementById('stockOutForm');
+
+        if (stockInForm) {
+            stockInForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                currentForm = this;
+                currentFormType = 'in';
+                showConfirmationModal();
+            });
+        }
+
+        if (stockOutForm) {
+            stockOutForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                currentForm = this;
+                currentFormType = 'out';
+                showConfirmationModal();
+            });
+        }
+
+        function showConfirmationModal() {
+            if (!modal || !confirmationMessage) return;
+
+            const productSelect = currentFormType === 'in' ?
+                document.getElementById('product_in') :
+                document.getElementById('product_out');
+            const quantityInput = currentFormType === 'in' ?
+                document.getElementById('quantity_in') :
+                document.getElementById('quantity_out');
+
+            if (!productSelect || !quantityInput) return;
+
+            const selectedProduct = productSelect.options[productSelect.selectedIndex];
+            const productName = selectedProduct.text.split(' (')[0];
+            const quantity = quantityInput.value;
+            const type = currentFormType === 'in' ? 'masuk' : 'keluar';
+
+            confirmationMessage.innerHTML = `
             <strong>Detail Pencatatan:</strong><br>
             Produk: ${productName}<br>
             Jumlah: ${quantity} unit<br>
@@ -487,96 +577,102 @@ document.addEventListener('DOMContentLoaded', function() {
             Apakah Anda yakin ingin melanjutkan?
         `;
 
-        modal.classList.remove('hidden');
-    }
-
-    confirmBtn.addEventListener('click', function() {
-        // Set confirmed field to true
-        const confirmedField = currentFormType === 'in' ? 
-            document.getElementById('confirmedIn') : 
-            document.getElementById('confirmedOut');
-        confirmedField.value = '1';
-        
-        modal.classList.add('hidden');
-        currentForm.submit();
-    });
-
-    cancelBtn.addEventListener('click', function() {
-        modal.classList.add('hidden');
-        currentForm = null;
-        currentFormType = null;
-    });
-
-    // Close modal when clicking outside
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            modal.classList.add('hidden');
-            currentForm = null;
-            currentFormType = null;
+            modal.classList.remove('hidden');
         }
+
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function() {
+                // Set confirmed field to true
+                const confirmedField = currentFormType === 'in' ?
+                    document.getElementById('confirmedIn') :
+                    document.getElementById('confirmedOut');
+
+                if (confirmedField) {
+                    confirmedField.value = '1';
+                }
+
+                if (modal) {
+                    modal.classList.add('hidden');
+                }
+
+                if (currentForm) {
+                    currentForm.submit();
+                }
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function() {
+                if (modal) {
+                    modal.classList.add('hidden');
+                }
+                currentForm = null;
+                currentFormType = null;
+            });
+        }
+
+        // Close modal when clicking outside
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    currentForm = null;
+                    currentFormType = null;
+                }
+            });
+        }
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('[id^="alert-"]');
+            alerts.forEach(function(alert) {
+                if (alert) {
+                    alert.style.transition = 'opacity 0.5s ease-out';
+                    alert.style.opacity = '0';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                }
+            });
+        }, 5000);
     });
 
-    // Auto-hide alerts after 5 seconds
-    setTimeout(function() {
-        const alerts = document.querySelectorAll('[id^="alert-"]');
-        alerts.forEach(function(alert) {
-            if (alert) {
-                alert.style.transition = 'opacity 0.5s ease-out';
-                alert.style.opacity = '0';
-                setTimeout(function() {
-                    alert.remove();
-                }, 500);
-            }
-        });
-    }, 5000);
-
-    // Show appropriate form based on old input
-    @if(old('type') === 'in')
-        btnStockIn.click();
-    @elseif(old('type') === 'out')
-        btnStockOut.click();
-    @else
-        // Show stock in form by default
-        btnStockIn.click();
-    @endif
-});
-
-// Function to close alerts manually
-function closeAlert(alertId) {
-    const alert = document.getElementById(alertId);
-    if (alert) {
-        alert.style.transition = 'opacity 0.3s ease-out';
-        alert.style.opacity = '0';
-        setTimeout(function() {
-            alert.remove();
-        }, 300);
+    // Function to close alerts manually
+    function closeAlert(alertId) {
+        const alert = document.getElementById(alertId);
+        if (alert) {
+            alert.style.transition = 'opacity 0.3s ease-out';
+            alert.style.opacity = '0';
+            setTimeout(function() {
+                alert.remove();
+            }, 300);
+        }
     }
-}
 
-// Toast notification function for dynamic alerts
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 z-50 max-w-sm w-full transition-all duration-300 transform translate-x-full`;
-    
-    const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 
-                   type === 'error' ? 'bg-red-50 border-red-200' : 
-                   'bg-yellow-50 border-yellow-200';
-    
-    const textColor = type === 'success' ? 'text-green-700' : 
-                     type === 'error' ? 'text-red-700' : 
-                     'text-yellow-700';
-    
-    const iconColor = type === 'success' ? 'text-green-500' : 
-                     type === 'error' ? 'text-red-500' : 
-                     'text-yellow-500';
+    // Toast notification function for dynamic alerts
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 z-50 max-w-sm w-full transition-all duration-300 transform translate-x-full`;
 
-    const icon = type === 'success' ? 
-        '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>' :
-        type === 'error' ?
-        '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>' :
-        '<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>';
+        const bgColor = type === 'success' ? 'bg-green-50 border-green-200' :
+            type === 'error' ? 'bg-red-50 border-red-200' :
+            'bg-yellow-50 border-yellow-200';
 
-    toast.innerHTML = `
+        const textColor = type === 'success' ? 'text-green-700' :
+            type === 'error' ? 'text-red-700' :
+            'text-yellow-700';
+
+        const iconColor = type === 'success' ? 'text-green-500' :
+            type === 'error' ? 'text-red-500' :
+            'text-yellow-500';
+
+        const icon = type === 'success' ?
+            '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>' :
+            type === 'error' ?
+            '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>' :
+            '<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>';
+
+        toast.innerHTML = `
         <div class="border rounded-lg p-4 shadow-lg ${bgColor}">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
@@ -594,23 +690,23 @@ function showToast(message, type = 'success') {
         </div>
     `;
 
-    document.body.appendChild(toast);
+        document.body.appendChild(toast);
 
-    // Animate in
-    setTimeout(() => {
-        toast.classList.remove('translate-x-full');
-    }, 100);
-
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        toast.classList.add('translate-x-full');
+        // Animate in
         setTimeout(() => {
-            if (toast.parentNode) {
-                toast.remove();
-            }
-        }, 300);
-    }, 5000);
-}
+            toast.classList.remove('translate-x-full');
+        }, 100);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            toast.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 300);
+        }, 5000);
+    }
 </script>
 
 @endsection
